@@ -5,7 +5,9 @@ import StatusCodes from 'http-status-codes';
 const createBlog: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const result = await BlogServices.createBlogIntoDB(data);
+    const userData = req.user;
+    // console.log(userData);
+    const result = await BlogServices.createBlogIntoDB(data, userData);
     res.status(StatusCodes.OK).json({
       success: true,
       message: 'Blog created successfully',
