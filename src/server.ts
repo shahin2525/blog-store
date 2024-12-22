@@ -5,8 +5,8 @@ import config from './app/config';
 async function main() {
   try {
     await mongoose.connect(config.db_url as string);
-    const test = 10;
-    // console.log(test);
+    // const test = 10;
+    //  console.log(test);
     app.listen(config.port, () => {
       console.log(`Example app listening on port ${config.port}`);
     });
