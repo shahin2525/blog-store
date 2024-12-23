@@ -11,7 +11,8 @@ const loginUser = async (payload: TLoginUser) => {
   if (isUserBlock) {
     throw new Error('user is  block');
   }
-  const isPasswordMatch = user.password === payload.password;
+  // const isPasswordMatch = user.password === payload.password;
+  const isPasswordMatch = User.isPasswordMatch(payload.password, user.password);
   if (!isPasswordMatch) {
     throw new Error('password is not match');
   }

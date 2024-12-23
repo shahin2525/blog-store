@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { TUser, UserModel } from './user.interface';
-
+import { hashSync } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 const userSchema = new Schema<TUser, UserModel>(
   {
     name: {
@@ -31,9 +32,30 @@ const userSchema = new Schema<TUser, UserModel>(
   },
 );
 
+//hash password
+
+userSchema.pre('save', async function (next) {
+  const hashedPassword = hashSync(this.password, 10);
+  this.password = hashedPassword;
+
+  next();
+});
+// password filed  empty
+userSchema.post('save', function () {
+  this.password = '';
+});
+
 userSchema.statics.isUserExists = async function (email: string) {
   const isUser = await User.findOne({ email: email });
   return isUser;
+};
+// password does not match
+userSchema.statics.isPasswordMatch = async function (
+  plainTextPassword: string,
+  hashedPassword,
+) {
+  const isPasswordMatch = bcrypt.compare(plainTextPassword, hashedPassword);
+  return isPasswordMatch;
 };
 // 3. Create a Model.
 export const User = model<TUser, UserModel>('User', userSchema);

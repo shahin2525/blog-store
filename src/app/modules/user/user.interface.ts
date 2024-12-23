@@ -12,6 +12,7 @@ export type TUser = {
 };
 export interface UserModel extends Model<TUser> {
   isUserExists(email: string): Promise<TUser | null>;
+  isPasswordMatch(plainTextPassword: string, hashedPassword: string): boolean;
 }
 // export type TUserRole = keyof typeof USER_ROLE;
 export type TUserRole = keyof typeof USER_ROLE;
