@@ -36,7 +36,41 @@ const updateBlog: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+// delete user
+
+const deleteBlog: RequestHandler = async (req, res, next) => {
+  try {
+    const userData = req.user;
+    const id = req.params.id;
+    // console.log(userData);
+    await BlogServices.deleteBlogFromDB(id, userData);
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'Blog deleted successfully',
+      statusCode: StatusCodes.OK,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getAllBlogs: RequestHandler = async (req, res, next) => {
+  try {
+    const result = await BlogServices.getAllBlogsFromDB();
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'Blogs fetched successfully',
+      statusCode: StatusCodes.OK,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const BlogController = {
   createBlog,
   updateBlog,
+  deleteBlog,
+  getAllBlogs,
 };
