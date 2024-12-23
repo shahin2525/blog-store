@@ -44,10 +44,15 @@ userSchema.pre('save', async function (next) {
 userSchema.post('save', function () {
   this.password = '';
 });
-
+// user exists by email
 userSchema.statics.isUserExists = async function (email: string) {
   const isUser = await User.findOne({ email: email });
   return isUser;
+};
+// user exists by id
+userSchema.statics.doesUserExists = async function (id: string) {
+  const doesUser = await User.findById(id);
+  return doesUser;
 };
 // password does not match
 userSchema.statics.isPasswordMatch = async function (
