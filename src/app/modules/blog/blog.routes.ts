@@ -6,4 +6,5 @@ import { USER_ROLE } from '../user/user.const';
 const router = Router();
 
 router.post('/', auth(USER_ROLE.user), BlogController.createBlog);
+router.patch('/:id', auth(USER_ROLE.user), BlogController.createBlog);
 export const BlogRoutes = router;
