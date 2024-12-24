@@ -25,40 +25,61 @@ const createBlogIntoDB = async (payload: TBlog, userData: JwtPayload) => {
 };
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   // search
-
-  let search = '';
-  if (query?.search) {
-    search = query.search as string;
-  }
-
-  const blogSearching = Blog.find({
-    $or: ['title', 'content'].map((field) => ({
+  const filter: Record<string, unknown> = {};
+  const { search, ...othersFilter } = query;
+  if (search) {
+    filter.$or = ['title', 'content'].map((field) => ({
       [field]: { $regex: search, $options: 'i' },
-    })),
+    }));
+  }
+  Object.keys(othersFilter).forEach((key) => {
+    if (key === 'author') {
+      filter[key] = new mongoose.Types.ObjectId(key);
+    } else {
+      filter[key] = key;
+    }
   });
-  // filtering
 
-  const queryObj = { ...query };
-
-  const excludeFields = ['search', 'sort'];
-  excludeFields.forEach((el) => delete queryObj[el]);
-
-  if (queryObj?.author) {
-    queryObj.author = new mongoose.Types.ObjectId(queryObj.author as string);
-  }
-  if (queryObj?.title) {
-    queryObj.title = queryObj.title;
-  }
-
-  const filterQuery = blogSearching.find(queryObj);
-  // sorting
   let sort = '-createdAt';
   if (query?.sort) {
     sort = query.sort as string;
   }
-  const sortQuery = await filterQuery.sort(sort);
-  // console.log(result);
+  const sortQuery = await Blog.find(filter).sort(sort);
   return sortQuery;
+
+  // let search = '';
+  // if (query?.search) {
+  //   search = query.search as string;
+  // }
+
+  // const blogSearching = Blog.find({
+  //   $or: ['title', 'content'].map((field) => ({
+  //     [field]: { $regex: search, $options: 'i' },
+  //   })),
+  // });
+  // filtering
+
+  // const queryObj = { ...query };
+
+  // const excludeFields = ['search', 'sort'];
+  // excludeFields.forEach((el) => delete queryObj[el]);
+
+  // if (queryObj?.author) {
+  //   queryObj.author = new mongoose.Types.ObjectId(queryObj.author as string);
+  // }
+  // if (queryObj?.title) {
+  //   queryObj.title = queryObj.title;
+  // }
+
+  // const filterQuery = blogSearching.find(queryObj);
+  // // sorting
+  // let sort = '-createdAt';
+  // if (query?.sort) {
+  //   sort = query.sort as string;
+  // }
+  // const sortQuery = await filterQuery.sort(sort);
+  // // console.log(result);
+  // return sortQuery;
 };
 const updateBlogIntoDB = async (
   id: string,
