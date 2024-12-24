@@ -4,6 +4,7 @@ import { Blog } from './blog.model';
 import { User } from '../user/user.model';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../error/appError';
+import mongoose from 'mongoose';
 
 const createBlogIntoDB = async (payload: TBlog, userData: JwtPayload) => {
   const { data } = userData;
@@ -22,8 +23,33 @@ const createBlogIntoDB = async (payload: TBlog, userData: JwtPayload) => {
 
   return result;
 };
-const getAllBlogsFromDB = async () => {
-  const result = await Blog.find();
+const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
+  // search
+
+  let search = '';
+  if (query?.search) {
+    search = query.search as string;
+  }
+
+  const blogSearching = Blog.find({
+    $or: ['title', 'content'].map((field) => ({
+      [field]: { $regex: search, $options: 'i' },
+    })),
+  });
+  // filtering
+
+  const queryObj = { ...query };
+
+  const excludeFields = ['search'];
+  excludeFields.forEach((el) => delete queryObj[el]);
+  console.log('base query', query);
+  console.log('query obj', queryObj);
+  if (queryObj?.filter) {
+    queryObj.author = new mongoose.Types.ObjectId(queryObj.filter as string);
+    delete queryObj.filter;
+  }
+  const result = await blogSearching.find(queryObj);
+  console.log(result);
   return result;
 };
 const updateBlogIntoDB = async (
