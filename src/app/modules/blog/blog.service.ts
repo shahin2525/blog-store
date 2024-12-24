@@ -24,29 +24,39 @@ const createBlogIntoDB = async (payload: TBlog, userData: JwtPayload) => {
   return result;
 };
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
-  // search
   const filter: Record<string, unknown> = {};
-  const { search, ...othersFilter } = query;
+  const { search, sortBy, ...otherFilters } = query;
+
+  // Search logic (partial match for title or content)
   if (search) {
-    filter.$or = ['title', 'content'].map((field) => ({
-      [field]: { $regex: search, $options: 'i' },
-    }));
+    const searchRegex = { $regex: search as string, $options: 'i' };
+    filter.$or = [{ title: searchRegex }, { content: searchRegex }];
   }
-  Object.keys(othersFilter).forEach((key) => {
+
+  // Exact match filters (e.g., author, title, createdAt)
+  Object.keys(otherFilters).forEach((key) => {
     if (key === 'author') {
-      filter[key] = new mongoose.Types.ObjectId(key);
+      // Convert to ObjectId for author filtering
+      filter[key] = new mongoose.Types.ObjectId(otherFilters[key] as string);
     } else {
-      filter[key] = key;
+      filter[key] = { $regex: otherFilters[key], $options: 'i' };
     }
   });
 
-  let sort = '-createdAt';
-  if (query?.sort) {
-    sort = query.sort as string;
-  }
-  const sortQuery = await Blog.find(filter).sort(sort);
-  return sortQuery;
+  // Default sort by newest blogs first
 
+  // console.log('sortStyle', sortOrderStyle);
+  const sort = sortBy ? (sortBy as string) : '-createdAt';
+  // const sortOrderStyle = sortOrder ? (sortOrder as string) : '-';
+  // console.log('sortStyle', sortOrderStyle);
+  // const sortForm = `${sortOrderStyle}${sort}`;
+  // console.log('sortForm', sortForm);
+
+  // console.log('sort', sort);
+  const result = await Blog.find(filter).sort(sort);
+  // console.log(result);
+
+  return result;
   // let search = '';
   // if (query?.search) {
   //   search = query.search as string;
@@ -57,7 +67,8 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   //     [field]: { $regex: search, $options: 'i' },
   //   })),
   // });
-  // filtering
+  // // console.log(blogSearching);
+  // // filtering
 
   // const queryObj = { ...query };
 
@@ -66,9 +77,6 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
 
   // if (queryObj?.author) {
   //   queryObj.author = new mongoose.Types.ObjectId(queryObj.author as string);
-  // }
-  // if (queryObj?.title) {
-  //   queryObj.title = queryObj.title;
   // }
 
   // const filterQuery = blogSearching.find(queryObj);
