@@ -40,17 +40,23 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
 
   const queryObj = { ...query };
 
-  const excludeFields = ['search'];
+  const excludeFields = ['search', 'sort'];
   excludeFields.forEach((el) => delete queryObj[el]);
-  console.log('base query', query);
-  console.log('query obj', queryObj);
+
   if (queryObj?.filter) {
     queryObj.author = new mongoose.Types.ObjectId(queryObj.filter as string);
     delete queryObj.filter;
   }
-  const result = await blogSearching.find(queryObj);
-  console.log(result);
-  return result;
+
+  const filterQuery = blogSearching.find(queryObj);
+  // sorting
+  let sort = '-createdAt';
+  if (query?.sort) {
+    sort = query.sort as string;
+  }
+  const sortQuery = await filterQuery.sort(sort);
+  // console.log(result);
+  return sortQuery;
 };
 const updateBlogIntoDB = async (
   id: string,
