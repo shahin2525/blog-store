@@ -43,9 +43,11 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   const excludeFields = ['search', 'sort'];
   excludeFields.forEach((el) => delete queryObj[el]);
 
-  if (queryObj?.filter) {
-    queryObj.author = new mongoose.Types.ObjectId(queryObj.filter as string);
-    delete queryObj.filter;
+  if (queryObj?.author) {
+    queryObj.author = new mongoose.Types.ObjectId(queryObj.author as string);
+  }
+  if (queryObj?.title) {
+    queryObj.title = queryObj.title;
   }
 
   const filterQuery = blogSearching.find(queryObj);
@@ -130,3 +132,39 @@ export const BlogServices = {
   deleteBlogFromDB,
   getAllBlogsFromDB,
 };
+
+/*
+const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
+  const filter: Record<string, unknown> = {};
+
+  // Extract search and filter fields
+  const { search, ...otherFilters } = query;
+
+  // Apply search on title or content
+  if (search) {
+    const searchRegex = { $regex: search as string, $options: 'i' };
+    filter.$or = [
+      { title: searchRegex },
+      { content: searchRegex }
+    ];
+  }
+
+  // Apply exact match filters (like title, author)
+  Object.keys(otherFilters).forEach((key) => {
+    if (key === 'author') {
+      // Convert author to ObjectId
+      filter[key] = new mongoose.Types.ObjectId(otherFilters[key] as string);
+    } else {
+      // Direct filter for other fields
+      filter[key] = otherFilters[key];
+    }
+  });
+
+  console.log('Final Filter:', filter); // Debugging
+
+  // Fetch data with dynamic filter
+  const result = await Blog.find(filter).sort('-createdAt');
+
+  return result;
+};
+*/
