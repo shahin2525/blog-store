@@ -56,6 +56,7 @@ const deleteBlog: RequestHandler = async (req, res, next) => {
 
 const getAllBlogs: RequestHandler = async (req, res, next) => {
   try {
+    console.log(req.query);
     const result = await BlogServices.getAllBlogsFromDB();
     res.status(StatusCodes.OK).json({
       success: true,
