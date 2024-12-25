@@ -7,6 +7,14 @@ const userSchema = new Schema<TUser, UserModel>(
     name: {
       type: String,
       required: true,
+
+      validate: {
+        validator: function (value: string) {
+          return /^[A-Za-z][A-Za-z0-9\s]*$/.test(value);
+        },
+        message:
+          'Name must start with letter and  contain only letters and number and space.',
+      },
     },
     email: {
       type: String,
@@ -31,6 +39,14 @@ const userSchema = new Schema<TUser, UserModel>(
     timestamps: true,
   },
 );
+// name validation
+
+// userSchema.pre('validate', function (next) {
+//   if (typeof this.name !== 'string') {
+//     this.invalidate('name', 'Name must be a string.');
+//   }
+//   next();
+// });
 
 //hash password
 
@@ -57,7 +73,7 @@ userSchema.statics.doesUserExists = async function (id: string) {
 // password does not match
 userSchema.statics.isPasswordMatch = async function (
   plainTextPassword: string,
-  hashedPassword,
+  hashedPassword: string,
 ) {
   const isPasswordMatch = bcrypt.compare(plainTextPassword, hashedPassword);
   return isPasswordMatch;

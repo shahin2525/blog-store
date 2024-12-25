@@ -33,7 +33,7 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
     filter.$or = [{ title: searchRegex }, { content: searchRegex }];
   }
 
-  // Exact match filters (e.g., author, title, createdAt)
+  // Exact match filters
   Object.keys(otherFilters).forEach((key) => {
     if (key === 'author') {
       // Convert to ObjectId for author filtering
@@ -45,49 +45,11 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
 
   // Default sort by newest blogs first
 
-  // console.log('sortStyle', sortOrderStyle);
   const sort = sortBy ? (sortBy as string) : '-createdAt';
-  // const sortOrderStyle = sortOrder ? (sortOrder as string) : '-';
-  // console.log('sortStyle', sortOrderStyle);
-  // const sortForm = `${sortOrderStyle}${sort}`;
-  // console.log('sortForm', sortForm);
 
-  // console.log('sort', sort);
   const result = await Blog.find(filter).sort(sort);
-  // console.log(result);
 
   return result;
-  // let search = '';
-  // if (query?.search) {
-  //   search = query.search as string;
-  // }
-
-  // const blogSearching = Blog.find({
-  //   $or: ['title', 'content'].map((field) => ({
-  //     [field]: { $regex: search, $options: 'i' },
-  //   })),
-  // });
-  // // console.log(blogSearching);
-  // // filtering
-
-  // const queryObj = { ...query };
-
-  // const excludeFields = ['search', 'sort'];
-  // excludeFields.forEach((el) => delete queryObj[el]);
-
-  // if (queryObj?.author) {
-  //   queryObj.author = new mongoose.Types.ObjectId(queryObj.author as string);
-  // }
-
-  // const filterQuery = blogSearching.find(queryObj);
-  // // sorting
-  // let sort = '-createdAt';
-  // if (query?.sort) {
-  //   sort = query.sort as string;
-  // }
-  // const sortQuery = await filterQuery.sort(sort);
-  // // console.log(result);
-  // return sortQuery;
 };
 const updateBlogIntoDB = async (
   id: string,
