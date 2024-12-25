@@ -4,7 +4,6 @@ import { ErrorRequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.log(err?.StatusCode);
   res.status(StatusCodes.BAD_REQUEST).json({
     success: false,
     message: err?.message ? err.message : 'validation error',

@@ -8,6 +8,8 @@
 
 > These technology had been used
 
+#### typescript
+
 #### express
 
 #### mongodb for database
