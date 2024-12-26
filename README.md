@@ -2,9 +2,9 @@
 
 ## to start the project use : npm run dev
 
-## [live-url](https://blog-store-pi.vercel.app/)
+## [live-url-link](https://blog-store-pi.vercel.app/)
 
-## admin email: jankar@j.com
+## admin email address: jankar@j.com
 
 ## admin password: jankar123
 
