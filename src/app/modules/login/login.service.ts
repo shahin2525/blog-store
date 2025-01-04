@@ -34,7 +34,9 @@ const loginUser = async (payload: TLoginUser) => {
     { expiresIn: '1d' },
   );
   return {
-    token: `Bearer ${accessToken}`,
+    // todo first
+    // token: `Bearer ${accessToken}`,
+    token: accessToken,
   };
 };
 export const LoginServices = {
