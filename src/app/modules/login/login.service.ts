@@ -42,14 +42,3 @@ const loginUser = async (payload: TLoginUser) => {
 export const LoginServices = {
   loginUser,
 };
-
-// mir
-/*
-Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoibWlyQG0uY29tIiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzM1MTA2ODkzLCJleHAiOjE3MzUxOTMyOTN9.heSboNz-IEa3po97I43jcQzjiJgScplQ51NtijfLViU
-*/
-// rakib
-/*
-Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoicmFraWJAci5jb20iLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE3MzUxMDYzODQsImV4cCI6MTczNTE5Mjc4NH0.GaFzcJGMkTDQ5nFMRwSCfpT7mz0QoDUOVK9u7D0VTbY
-
-Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoicmFraWJAci5jb20iLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE3MzUxMDYzODQsImV4cCI6MTczNTE5Mjc4NH0.GaFzcJGMkTDQ5nFMRwSCfpT7mz0QoDUOVK9u7D0VTbY
-*/
