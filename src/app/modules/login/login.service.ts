@@ -35,10 +35,19 @@ const loginUser = async (payload: TLoginUser) => {
     config.jwt_secret as string,
     { expiresIn: '1d' },
   );
+  const refreshToken = jwt.sign(
+    {
+      data: jwtPayload,
+    },
+    config.jwt_refresh_secret as string,
+    { expiresIn: '20d' },
+  );
+
   return {
     // todo first
     // token: `Bearer ${accessToken}`,
-    token: accessToken,
+    accessToken,
+    refreshToken,
   };
 };
 const changePassword = async (
@@ -92,7 +101,44 @@ const changePassword = async (
 
   return null;
 };
+const refreshToken = async (token: string) => {
+  if (!token) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'you are unauthorize 1');
+  }
+
+  const decoded = jwt.verify(token, config.jwt_refresh_secret as string);
+  //   console.log(decoded);
+  const { data } = decoded as JwtPayload;
+  const { email } = data;
+  const user = await User.isUserExists(email);
+  if (!user) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'you are unauthorize 2');
+  }
+  const isBlocked = user.isBlocked;
+  if (isBlocked) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'you are unauthorize 3');
+  }
+  const jwtPayload = {
+    email: user.email,
+    role: user.role,
+  };
+
+  const accessToken = jwt.sign(
+    {
+      data: jwtPayload,
+    },
+    config.jwt_secret as string,
+    { expiresIn: '1d' },
+  );
+
+  // console.log(accessToken);
+  return {
+    accessToken,
+  };
+};
+
 export const LoginServices = {
   loginUser,
   changePassword,
+  refreshToken,
 };
