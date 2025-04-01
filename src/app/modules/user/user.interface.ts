@@ -7,7 +7,7 @@ export type TUser = {
   name: string;
   email: string;
   password: string;
-  role: 'user' | 'admin';
+  role: 'landlord' | 'admin' | 'tenant';
   isBlocked: boolean;
 };
 export interface UserModel extends Model<TUser> {
