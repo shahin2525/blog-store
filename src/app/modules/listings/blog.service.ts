@@ -1,12 +1,12 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { TBlog } from './blog.interface';
-import { Blog } from './blog.model';
+import { TListing } from './blog.interface';
+import { Listing } from './blog.model';
 import { User } from '../user/user.model';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../error/appError';
 import mongoose from 'mongoose';
 
-const createBlogIntoDB = async (payload: TBlog, userData: JwtPayload) => {
+const createListingIntoDB = async (payload: TListing, userData: JwtPayload) => {
   const { data } = userData;
   const { email } = data;
   const user = await User.isUserExists(email);
@@ -18,12 +18,12 @@ const createBlogIntoDB = async (payload: TBlog, userData: JwtPayload) => {
     throw new AppError(StatusCodes.FORBIDDEN, 'you user is blocked');
   }
 
-  payload.author = user?._id;
-  const result = await Blog.create(payload);
+  payload.landlordID = user?._id;
+  const result = await Listing.create(payload);
 
   return result;
 };
-const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
+const getAllListingsFromDB = async (query: Record<string, unknown>) => {
   const filter: Record<string, unknown> = {};
   const { search, sortBy, ...otherFilters } = query;
 
@@ -47,13 +47,13 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
 
   const sort = sortBy ? (sortBy as string) : '-createdAt';
 
-  const result = await Blog.find(filter).sort(sort);
+  const result = await Listing.find(filter).sort(sort);
 
   return result;
 };
-const updateBlogIntoDB = async (
+const updateListingIntoDB = async (
   id: string,
-  payload: Partial<TBlog>,
+  payload: Partial<TListing>,
   userData: JwtPayload,
 ) => {
   const { data } = userData;
@@ -67,25 +67,26 @@ const updateBlogIntoDB = async (
     throw new AppError(StatusCodes.FORBIDDEN, 'you user is blocked');
   }
 
-  const blogInfo = await Blog.findById(id);
+  const blogInfo = await Listing.findById(id);
 
-  const isBlogAuthorMatch = blogInfo?.author.toString() !== user._id.toString();
+  const isListingAuthorMatch =
+    blogInfo?.landlordID.toString() !== user._id.toString();
 
-  if (isBlogAuthorMatch) {
+  if (isListingAuthorMatch) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      'author does not exists this blog',
+      'author does not exists this listing',
     );
   }
 
-  const result = await Blog.findByIdAndUpdate(id, payload, {
+  const result = await Listing.findByIdAndUpdate(id, payload, {
     new: true,
   });
 
   return result;
 };
 
-const deleteBlogFromDB = async (
+const deleteListingFromDB = async (
   id: string,
 
   userData: JwtPayload,
@@ -101,31 +102,32 @@ const deleteBlogFromDB = async (
     throw new AppError(StatusCodes.FORBIDDEN, 'you user is blocked');
   }
 
-  const blogInfo = await Blog.findById(id);
+  const blogInfo = await Listing.findById(id);
 
-  const isBlogAuthorMatch = blogInfo?.author.toString() !== user._id.toString();
+  const isListingAuthorMatch =
+    blogInfo?.landlordID.toString() !== user._id.toString();
 
-  if (isBlogAuthorMatch) {
+  if (isListingAuthorMatch) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      'author does not exists this blog',
+      'landlord does not exists this listing',
     );
   }
 
-  const result = await Blog.findByIdAndDelete(id);
+  const result = await Listing.findByIdAndDelete(id);
 
   return result;
 };
 
-export const BlogServices = {
-  createBlogIntoDB,
-  updateBlogIntoDB,
-  deleteBlogFromDB,
-  getAllBlogsFromDB,
+export const ListingServices = {
+  createListingIntoDB,
+  updateListingIntoDB,
+  deleteListingFromDB,
+  getAllListingsFromDB,
 };
 
 /*
-const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
+const getAllListingsFromDB = async (query: Record<string, unknown>) => {
   const filter: Record<string, unknown> = {};
 
   // Extract search and filter fields
@@ -154,7 +156,7 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   console.log('Final Filter:', filter); // Debugging
 
   // Fetch data with dynamic filter
-  const result = await Blog.find(filter).sort('-createdAt');
+  const result = await Listing.find(filter).sort('-createdAt');
 
   return result;
 };

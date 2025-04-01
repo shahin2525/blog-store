@@ -1,16 +1,16 @@
 import { RequestHandler } from 'express';
-import { BlogServices } from './blog.service';
+import { ListingServices } from './blog.service';
 
 import StatusCodes from 'http-status-codes';
-const createBlog: RequestHandler = async (req, res, next) => {
+const createListing: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
     const userData = req.user;
     // console.log(userData);
-    const result = await BlogServices.createBlogIntoDB(data, userData);
+    const result = await ListingServices.createListingIntoDB(data, userData);
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Blog created successfully',
+      message: 'Listing created successfully',
       statusCode: StatusCodes.CREATED,
       data: result,
     });
@@ -19,16 +19,20 @@ const createBlog: RequestHandler = async (req, res, next) => {
   }
 };
 // blog update
-const updateBlog: RequestHandler = async (req, res, next) => {
+const updateListing: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
     const userData = req.user;
     const id = req.params.id;
     // console.log(userData);
-    const result = await BlogServices.updateBlogIntoDB(id, data, userData);
+    const result = await ListingServices.updateListingIntoDB(
+      id,
+      data,
+      userData,
+    );
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Blog updated successfully',
+      message: 'Listing updated successfully',
       statusCode: StatusCodes.OK,
       data: result,
     });
@@ -38,15 +42,15 @@ const updateBlog: RequestHandler = async (req, res, next) => {
 };
 // delete user
 
-const deleteBlog: RequestHandler = async (req, res, next) => {
+const deleteListing: RequestHandler = async (req, res, next) => {
   try {
     const userData = req.user;
     const id = req.params.id;
     // console.log(userData);
-    await BlogServices.deleteBlogFromDB(id, userData);
+    await ListingServices.deleteListingFromDB(id, userData);
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Blog deleted successfully',
+      message: 'Listing deleted successfully',
       statusCode: StatusCodes.OK,
     });
   } catch (error) {
@@ -54,13 +58,12 @@ const deleteBlog: RequestHandler = async (req, res, next) => {
   }
 };
 
-const getAllBlogs: RequestHandler = async (req, res, next) => {
+const getAllListings: RequestHandler = async (req, res, next) => {
   try {
-    console.log('cookie check', req.cookies);
-    const result = await BlogServices.getAllBlogsFromDB(req.query);
+    const result = await ListingServices.getAllListingsFromDB(req.query);
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Blogs fetched successfully',
+      message: 'Listings fetched successfully',
       statusCode: StatusCodes.OK,
       data: result,
     });
@@ -69,9 +72,9 @@ const getAllBlogs: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const BlogController = {
-  createBlog,
-  updateBlog,
-  deleteBlog,
-  getAllBlogs,
+export const ListingController = {
+  createListing,
+  updateListing,
+  deleteListing,
+  getAllListings,
 };

@@ -17,14 +17,14 @@ const blockUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-const deleteBlog: RequestHandler = async (req, res, next) => {
+const deleteListing: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
     // console.log(userData);
-    await AdminServices.deleteBlogFromDB(id);
+    await AdminServices.deleteListingFromDB(id);
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Blog deleted successfully',
+      message: 'Listing deleted successfully',
       statusCode: StatusCodes.OK,
     });
   } catch (error) {
@@ -34,5 +34,5 @@ const deleteBlog: RequestHandler = async (req, res, next) => {
 
 export const AdminController = {
   blockUser,
-  deleteBlog,
+  deleteListing,
 };

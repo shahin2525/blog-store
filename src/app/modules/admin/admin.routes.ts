@@ -9,5 +9,9 @@ router.patch(
   auth(USER_ROLE.admin),
   AdminController.blockUser,
 );
-router.delete('/blogs/:id', auth(USER_ROLE.admin), AdminController.deleteBlog);
+router.delete(
+  '/blogs/:id',
+  auth(USER_ROLE.admin),
+  AdminController.deleteListing,
+);
 export const AdminRoutes = router;

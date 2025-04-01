@@ -12,8 +12,8 @@ const loginUser: RequestHandler = async (req, res, next) => {
       LoginValidations.loginUserValidationSchema.parse(data);
     const result = await LoginServices.loginUser(validatedData);
 
-    console.log('result', result);
-    console.log('cookie', req.cookies);
+    // console.log('result', result);
+    // console.log('cookie', req.cookies);
 
     const { accessToken, refreshToken } = result;
     res.cookie('refreshToken', refreshToken, {
