@@ -3,6 +3,7 @@ import AppError from '../../error/appError';
 import { TRequest } from './request.interface';
 import { Listing } from '../listings/blog.model';
 import { Request } from './request.modal';
+import { User } from '../user/user.model';
 // import { User } from '../user/user.model';
 // import { TRequest } from './request.interface';
 // import { Request } from '../requests/blog.model';
@@ -15,12 +16,12 @@ import { Request } from './request.modal';
 // import { requestUtils } from './request.utils';
 
 const createRequestBikeIntoDB = async (
-  //   userEmail: string,
+  userEmail: string,
   payload: TRequest,
   //   client_ip: string,
 ) => {
-  //   const user = await User.isUserExists(payload.tenantID);
-  //   console.log(user);
+  const user = await User.isUserExists(userEmail);
+  console.log(user);
   const findListingData = await Listing.findById(payload.listingID);
 
   if (!findListingData) {

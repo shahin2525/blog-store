@@ -1,23 +1,38 @@
 import { Router } from 'express';
-import { OrderControllers } from './order.controller';
+// import { RequestControllers } from './request.controller';
 import auth from '../../middlewares/auth';
 import { USER_ROLE } from '../user/user.const';
+import { RequestControllers } from './request.controller';
 
 const router = Router();
-router.get('/verify', auth(USER_ROLE.customer), OrderControllers.verifyPayment);
-router.get(
-  '/:email',
-  auth(USER_ROLE.customer),
-  OrderControllers.getAllOrderByEmailForSingleCustomer,
+
+// router.get('/verify', auth(USER_ROLE.customer), RequestControllers.verifyPayment);
+// router.get(
+//   '/:email',
+//   auth(USER_ROLE.customer),
+//   RequestControllers.getAllRequestByEmailForSingleCustomer,
+// );
+
+// requestRouter.get("/verify", auth(UserRole.user), requestController.verifyPayment);
+
+router.post('/', auth(USER_ROLE.tenant), RequestControllers.createRequestBike);
+router.delete(
+  '/:requestId',
+  auth(USER_ROLE.admin),
+  RequestControllers.deleteRequest,
 );
-// orderRouter.get("/verify", auth(UserRole.user), orderController.verifyPayment);
+router.put(
+  '/:requestId',
+  auth(USER_ROLE.admin),
+  RequestControllers.updateRequest,
+);
+router.get(
+  '/:requestId',
+  auth(USER_ROLE.admin),
+  RequestControllers.getSingleRequest,
+);
 
-router.post('/', auth(USER_ROLE.customer), OrderControllers.createOrderBike);
-router.delete('/:orderId', auth(USER_ROLE.admin), OrderControllers.deleteOrder);
-router.put('/:orderId', auth(USER_ROLE.admin), OrderControllers.updateOrder);
-router.get('/:orderId', auth(USER_ROLE.admin), OrderControllers.getSingleOrder);
+router.get('/', auth(USER_ROLE.admin), RequestControllers.getAllRequest);
 
-router.get('/', auth(USER_ROLE.admin), OrderControllers.getAllOrder);
-
-router.get('/revenue', OrderControllers.calculateTotalRevenue);
-export const OrderRoutes = router;
+// router.get('/revenue', RequestControllers.calculateTotalRevenue);
+export const RequestRoutes = router;

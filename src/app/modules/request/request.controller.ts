@@ -1,21 +1,22 @@
 import { RequestHandler } from 'express';
-import { OrderServices } from './order.service';
+// import { RequestServices } from './request.service';
 import { StatusCodes } from 'http-status-codes';
+import { RequestServices } from './request.service';
 
-const createOrderBike: RequestHandler = async (req, res, next) => {
+const createRequestBike: RequestHandler = async (req, res, next) => {
   try {
     const userEmail = req.user?.data.email;
     // console.log('user', userEmail);
     // const user
     const payload = req.body;
-    const result = await OrderServices.createOrderBikeIntoDB(
+    const result = await RequestServices.createRequestBikeIntoDB(
       userEmail,
       payload,
-      req.ip!,
+      //   req.ip!,
     );
 
     res.status(200).json({
-      message: 'Order  created successfully',
+      message: 'Request  created successfully',
       status: true,
       data: result,
     });
@@ -26,102 +27,102 @@ const createOrderBike: RequestHandler = async (req, res, next) => {
 // verify payment
 
 // const verifyPayment = catchAsync(async (req, res) => {
-//   const order = await orderService.verifyPayment(req.query.order_id as string);
+//   const request = await requestService.verifyPayment(req.query.request_id as string);
 
 //   sendResponse(res, {
 //     statusCode: httpStatus.CREATED,
-//     message: "Order verified successfully",
-//     data: order,
+//     message: "Request verified successfully",
+//     data: request,
 //   });
 // });
 
-const verifyPayment: RequestHandler = async (req, res, next) => {
-  try {
-    const result = await OrderServices.verifyPayment(
-      req.query.order_id as string,
-    );
-    // console.log(result);
-    res.status(200).json({
-      status: true,
-      message: 'Order verified successfully',
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+// const verifyPayment: RequestHandler = async (req, res, next) => {
+//   try {
+//     const result = await RequestServices.verifyPayment(
+//       req.query.request_id as string,
+//     );
+//     // console.log(result);
+//     res.status(200).json({
+//       status: true,
+//       message: 'Request verified successfully',
+//       data: result,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 // calculate total revenue
-const calculateTotalRevenue: RequestHandler = async (req, res, next) => {
-  try {
-    const result = await OrderServices.calculateRevenueFromDB();
+// const calculateTotalRevenue: RequestHandler = async (req, res, next) => {
+//   try {
+//     const result = await RequestServices.calculateRevenueFromDB();
 
-    res.status(200).json({
-      message: 'Revenue calculated successfully',
-      status: true,
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+//     res.status(200).json({
+//       message: 'Revenue calculated successfully',
+//       status: true,
+//       data: result,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
-const deleteOrder: RequestHandler = async (req, res, next) => {
+const deleteRequest: RequestHandler = async (req, res, next) => {
   try {
-    const id = req.params.orderId;
+    const id = req.params.requestId;
     // console.log(userData);
-    await OrderServices.deleteOrderFromDB(id);
+    await RequestServices.deleteRequestFromDB(id);
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Order deleted successfully',
+      message: 'Request deleted successfully',
       statusCode: StatusCodes.OK,
     });
   } catch (error) {
     next(error);
   }
 };
-const updateOrder: RequestHandler = async (req, res, next) => {
+const updateRequest: RequestHandler = async (req, res, next) => {
   try {
-    const id = req.params.orderId;
+    const id = req.params.requestId;
     const data = req.body;
-    const result = await OrderServices.updateOrderFromDB(id, data);
+    const result = await RequestServices.updateRequestFromDB(id, data);
     res.status(200).json({
       status: true,
-      message: 'Order updated successfully',
+      message: 'Request updated successfully',
       data: result,
     });
   } catch (error) {
     next(error);
   }
 };
-const getAllOrder: RequestHandler = async (req, res, next) => {
+const getAllRequest: RequestHandler = async (req, res, next) => {
   try {
-    const result = await OrderServices.getAllOrderFromDB();
+    const result = await RequestServices.getAllRequestFromDB();
     res.status(200).json({
       status: true,
-      message: 'Orders retrieved successfully',
+      message: 'Requests retrieved successfully',
       data: result,
     });
   } catch (error) {
     next(error);
   }
 };
-// get single order
-const getSingleOrder: RequestHandler = async (req, res, next) => {
+// get single request
+const getSingleRequest: RequestHandler = async (req, res, next) => {
   try {
-    const id = req.params.orderId;
-    const result = await OrderServices.getSingleOrderFromDB(id);
+    const id = req.params.requestId;
+    const result = await RequestServices.getSingleRequestFromDB(id);
     res.status(200).json({
       status: true,
-      message: 'single order retrieved successfully',
+      message: 'single request retrieved successfully',
       data: result,
     });
   } catch (error) {
     next(error);
   }
 };
-// get all order for single user
-const getAllOrderByEmailForSingleCustomer: RequestHandler = async (
+// get all request for single user
+const getAllRequestByEmailForSingleCustomer: RequestHandler = async (
   req,
   res,
   next,
@@ -130,23 +131,23 @@ const getAllOrderByEmailForSingleCustomer: RequestHandler = async (
     const email = req.params.email;
     // console.log(email);
     const result =
-      await OrderServices.getAllOrderByEmailForSingleCustomerFromDB(email);
+      await RequestServices.getAllRequestByEmailForSingleCustomerFromDB(email);
     res.status(200).json({
       status: true,
-      message: 'get all orders for single customers retrieved successfully',
+      message: 'get all requests for single tenant retrieved successfully',
       data: result,
     });
   } catch (error) {
     next(error);
   }
 };
-export const OrderControllers = {
-  deleteOrder,
-  createOrderBike,
-  calculateTotalRevenue,
-  updateOrder,
-  getAllOrder,
-  getSingleOrder,
-  getAllOrderByEmailForSingleCustomer,
-  verifyPayment,
+export const RequestControllers = {
+  deleteRequest,
+  createRequestBike,
+  //   calculateTotalRevenue,
+  updateRequest,
+  getAllRequest,
+  getSingleRequest,
+  getAllRequestByEmailForSingleCustomer,
+  //   verifyPayment,
 };
