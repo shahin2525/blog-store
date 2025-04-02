@@ -8,13 +8,13 @@ const blockUserFromDB = async (id: string) => {
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, 'user does not found');
   }
-  const userStatusBlocked = user.isBlocked;
+  const userStatusBlocked = user.deactivate;
   if (userStatusBlocked) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'user is already blocked ');
+    throw new AppError(StatusCodes.BAD_REQUEST, 'user is already deactivated ');
   }
   const result = await User.findByIdAndUpdate(
     id,
-    { isBlocked: true },
+    { deactivate: true },
     { new: true, runValidators: true },
   );
   return result;
