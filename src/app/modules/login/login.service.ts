@@ -11,7 +11,7 @@ const loginUser = async (payload: TLoginUser) => {
   if (!user) {
     throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials 1');
   }
-  const isUserBlock = user.isBlocked;
+  const isUserBlock = user.deactivate;
   if (isUserBlock) {
     throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials 2');
   }
@@ -64,7 +64,7 @@ const changePassword = async (
   }
   // checking if the user is blocked
 
-  const isUserBlock = user.isBlocked;
+  const isUserBlock = user.deactivate;
   if (isUserBlock) {
     throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials 2');
   }
@@ -114,7 +114,7 @@ const refreshToken = async (token: string) => {
   if (!user) {
     throw new AppError(StatusCodes.FORBIDDEN, 'you are unauthorize 2');
   }
-  const isBlocked = user.isBlocked;
+  const isBlocked = user.deactivate;
   if (isBlocked) {
     throw new AppError(StatusCodes.FORBIDDEN, 'you are unauthorize 3');
   }

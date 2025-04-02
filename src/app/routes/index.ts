@@ -17,7 +17,7 @@ const routesModule = [
     route: UserRoutes,
   },
   {
-    path: '/blogs/',
+    path: '/landlords/listings/',
     route: ListingRoutes,
   },
   {
