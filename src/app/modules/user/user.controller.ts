@@ -18,6 +18,51 @@ const createUser: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const getAllUser: RequestHandler = async (req, res, next) => {
+  try {
+    const result = await UserServices.getAllUserFromDB();
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'get all user  successfully',
+      statusCode: StatusCodes.CREATED,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const updateUserRole: RequestHandler = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const id = req.params.id;
+    const result = await UserServices.updateUserRoleFromDB(id, data);
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'update user role  successfully',
+      statusCode: StatusCodes.CREATED,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const deleteUser: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const result = await UserServices.deleteUserFromDB(id);
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'delete user  successfully',
+      statusCode: StatusCodes.CREATED,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const UserController = {
   createUser,
+  getAllUser,
+  updateUserRole,
+  deleteUser,
 };

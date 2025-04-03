@@ -13,9 +13,9 @@ const createListingIntoDB = async (payload: TListing, userData: JwtPayload) => {
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, 'user is not found');
   }
-  const isBlocked = user.isBlocked;
+  const isBlocked = user.deactivate;
   if (isBlocked) {
-    throw new AppError(StatusCodes.FORBIDDEN, 'you user is blocked');
+    throw new AppError(StatusCodes.FORBIDDEN, 'you  are deactivated');
   }
 
   payload.landlordID = user?._id;
@@ -30,7 +30,7 @@ const getAllListingsFromDB = async (query: Record<string, unknown>) => {
   // Search logic (partial match for title or content)
   if (search) {
     const searchRegex = { $regex: search as string, $options: 'i' };
-    filter.$or = [{ title: searchRegex }, { content: searchRegex }];
+    filter.$or = [{ location: searchRegex }, { content: searchRegex }];
   }
 
   // Exact match filters
@@ -62,9 +62,9 @@ const updateListingIntoDB = async (
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, 'user is not found');
   }
-  const isBlocked = user.isBlocked;
+  const isBlocked = user.deactivate;
   if (isBlocked) {
-    throw new AppError(StatusCodes.FORBIDDEN, 'you user is blocked');
+    throw new AppError(StatusCodes.FORBIDDEN, 'you are deactivated');
   }
 
   const blogInfo = await Listing.findById(id);
@@ -75,7 +75,7 @@ const updateListingIntoDB = async (
   if (isListingAuthorMatch) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      'author does not exists this listing',
+      'landlord does not exists this listing',
     );
   }
 
@@ -97,9 +97,9 @@ const deleteListingFromDB = async (
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, 'user is not found');
   }
-  const isBlocked = user.isBlocked;
+  const isBlocked = user.deactivate;
   if (isBlocked) {
-    throw new AppError(StatusCodes.FORBIDDEN, 'you user is blocked');
+    throw new AppError(StatusCodes.FORBIDDEN, 'you are deactivated');
   }
 
   const blogInfo = await Listing.findById(id);

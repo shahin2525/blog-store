@@ -12,7 +12,7 @@ router.patch(
 );
 router.delete(
   '/:id',
-  auth(USER_ROLE.landlord, USER_ROLE.admin),
+  auth(USER_ROLE.landlord),
   ListingController.deleteListing,
 );
 router.post('/', auth(USER_ROLE.landlord), ListingController.createListing);
