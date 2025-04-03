@@ -72,9 +72,34 @@ const getAllListings: RequestHandler = async (req, res, next) => {
   }
 };
 
+const getAllListingByEmailForSingleLandlord: RequestHandler = async (
+  req,
+  res,
+  next,
+) => {
+  try {
+    // const email = req.params.email;
+    const userData = req.user;
+
+    // console.log(email);
+    const result =
+      await ListingServices.getAllListingByEmailForSingleLandlordFromDB(
+        userData,
+      );
+    res.status(200).json({
+      status: true,
+      message: 'get all listing for single landlord retrieved successfully',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const ListingController = {
   createListing,
   updateListing,
   deleteListing,
   getAllListings,
+  getAllListingByEmailForSingleLandlord,
 };

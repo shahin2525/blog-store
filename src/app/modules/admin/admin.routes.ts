@@ -26,4 +26,5 @@ router.put(
   ListingController.updateListing,
 );
 router.get('/users/', auth(USER_ROLE.admin), UserController.getAllUser);
+router.get('/listings', auth(USER_ROLE.admin), UserController.getAllUser);
 export const AdminRoutes = router;

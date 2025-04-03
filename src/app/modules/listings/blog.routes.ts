@@ -16,9 +16,10 @@ router.delete(
   ListingController.deleteListing,
 );
 router.post('/', auth(USER_ROLE.landlord), ListingController.createListing);
+router.get('/', auth(USER_ROLE.landlord), ListingController.getAllListings);
 router.get(
   '/',
-  auth(USER_ROLE.admin, USER_ROLE.landlord),
-  ListingController.getAllListings,
+  auth(USER_ROLE.landlord),
+  ListingController.getAllListingByEmailForSingleLandlord,
 );
 export const ListingRoutes = router;

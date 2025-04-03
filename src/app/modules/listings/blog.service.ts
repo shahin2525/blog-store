@@ -119,11 +119,21 @@ const deleteListingFromDB = async (
   return result;
 };
 
+const getAllListingByEmailForSingleLandlordFromDB = async (
+  payload: JwtPayload,
+) => {
+  const { data } = payload;
+  const email = data?.email;
+  const result = await Listing.find({ email });
+  return result;
+};
+
 export const ListingServices = {
   createListingIntoDB,
   updateListingIntoDB,
   deleteListingFromDB,
   getAllListingsFromDB,
+  getAllListingByEmailForSingleLandlordFromDB,
 };
 
 /*
