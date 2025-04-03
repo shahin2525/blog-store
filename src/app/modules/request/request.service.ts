@@ -25,7 +25,7 @@ const createRequestBikeIntoDB = async (
   const findListingData = await Listing.findById(payload.listingID);
 
   if (!findListingData) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Request is not found');
+    throw new AppError(StatusCodes.BAD_REQUEST, 'listing is not found');
   }
 
   const result = await Request.create(payload);

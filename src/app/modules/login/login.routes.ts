@@ -10,7 +10,7 @@ router.post('/login', LoginController.loginUser);
 
 router.post(
   '/change-password',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.landlord, USER_ROLE.tenant),
   //   validateRequest(AuthValidation.changePasswordValidationSchema),
   LoginController.changePassword,
 );

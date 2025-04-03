@@ -122,7 +122,7 @@ const getSingleRequest: RequestHandler = async (req, res, next) => {
   }
 };
 // get all request for single user
-const getAllRequestByEmailForSingleCustomer: RequestHandler = async (
+const getAllRequestByEmailForSingleTenant: RequestHandler = async (
   req,
   res,
   next,
@@ -148,6 +148,6 @@ export const RequestControllers = {
   updateRequest,
   getAllRequest,
   getSingleRequest,
-  getAllRequestByEmailForSingleCustomer,
+  getAllRequestByEmailForSingleTenant,
   //   verifyPayment,
 };

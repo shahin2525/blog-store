@@ -33,6 +33,11 @@ router.get(
 );
 
 router.get('/', auth(USER_ROLE.admin), RequestControllers.getAllRequest);
+router.get(
+  '/tenants/requests/',
+  auth(USER_ROLE.tenant),
+  RequestControllers.getAllRequest,
+);
 
 // router.get('/revenue', RequestControllers.calculateTotalRevenue);
 export const RequestRoutes = router;
