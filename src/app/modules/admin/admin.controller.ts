@@ -17,11 +17,11 @@ const blockUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-const deleteListing: RequestHandler = async (req, res, next) => {
+const deleteListingByAdmin: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
     // console.log(userData);
-    await AdminServices.deleteListingFromDB(id);
+    await AdminServices.deleteListingByAdminFromDB(id);
     res.status(StatusCodes.OK).json({
       success: true,
       message: 'Listing deleted successfully',
@@ -31,8 +31,25 @@ const deleteListing: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const updateListingByAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    // console.log(userData);
+    const result = await AdminServices.updateListingByAdminFromDB(id, data);
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'Listing update for admin successfully',
+      statusCode: StatusCodes.OK,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const AdminController = {
   blockUser,
-  deleteListing,
+  deleteListingByAdmin,
+  updateListingByAdmin,
 };

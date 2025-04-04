@@ -49,12 +49,11 @@ const updateUserRole: RequestHandler = async (req, res, next) => {
 const deleteUser: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const result = await UserServices.deleteUserFromDB(id);
+    await UserServices.deleteUserFromDB(id);
     res.status(StatusCodes.OK).json({
       success: true,
       message: 'delete user  successfully',
       statusCode: StatusCodes.CREATED,
-      data: result,
     });
   } catch (error) {
     next(error);

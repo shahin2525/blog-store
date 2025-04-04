@@ -51,6 +51,11 @@ const getAllListingsFromDB = async (query: Record<string, unknown>) => {
 
   return result;
 };
+
+const getAllListingForAdminFromDB = async () => {
+  const result = await Listing.find();
+  return result;
+};
 const updateListingIntoDB = async (
   id: string,
   payload: Partial<TListing>,
@@ -134,6 +139,7 @@ export const ListingServices = {
   deleteListingFromDB,
   getAllListingsFromDB,
   getAllListingByEmailForSingleLandlordFromDB,
+  getAllListingForAdminFromDB,
 };
 
 /*

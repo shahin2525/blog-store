@@ -71,6 +71,19 @@ const getAllListings: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const getAllListingsForAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const result = await ListingServices.getAllListingForAdminFromDB();
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'get all Listings for admin fetched successfully',
+      statusCode: StatusCodes.OK,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const getAllListingByEmailForSingleLandlord: RequestHandler = async (
   req,
@@ -102,4 +115,5 @@ export const ListingController = {
   deleteListing,
   getAllListings,
   getAllListingByEmailForSingleLandlord,
+  getAllListingsForAdmin,
 };

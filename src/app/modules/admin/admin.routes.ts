@@ -15,20 +15,20 @@ router.patch(
 router.delete(
   '/listings/:id',
   auth(USER_ROLE.admin),
-  AdminController.deleteListing,
+  AdminController.deleteListingByAdmin,
 );
 
 router.put('/users/:id', auth(USER_ROLE.admin), UserController.updateUserRole);
-router.delete('/user/:id', auth(USER_ROLE.admin), UserController.deleteUser);
+router.delete('/users/:id', auth(USER_ROLE.admin), UserController.deleteUser);
 router.put(
   '/listings/:id',
   auth(USER_ROLE.admin),
-  ListingController.updateListing,
+  AdminController.updateListingByAdmin,
 );
 router.get('/users/', auth(USER_ROLE.admin), UserController.getAllUser);
 router.get(
   '/listings',
   auth(USER_ROLE.admin),
-  ListingController.getAllListings,
+  ListingController.getAllListingsForAdmin,
 );
 export const AdminRoutes = router;

@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../error/appError';
 import { User } from '../user/user.model';
 import { Listing } from '../listings/blog.model';
+import { TListing } from '../listings/blog.interface';
 
 const blockUserFromDB = async (id: string) => {
   const user = await User.doesUserExists(id);
@@ -20,7 +21,7 @@ const blockUserFromDB = async (id: string) => {
   return result;
 };
 
-const deleteListingFromDB = async (id: string) => {
+const deleteListingByAdminFromDB = async (id: string) => {
   const listing = await Listing.isListingExists(id);
   if (!listing) {
     throw new AppError(StatusCodes.NOT_FOUND, 'listing does not found');
@@ -32,7 +33,22 @@ const deleteListingFromDB = async (id: string) => {
   const result = await Listing.findByIdAndDelete(id);
   return result;
 };
+const updateListingByAdminFromDB = async (
+  id: string,
+  data: Partial<TListing>,
+) => {
+  if (!(await Listing.isListingExists(id))) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'listing id  not found');
+  }
+  const result = await Listing.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+  });
+  return result;
+};
+
 export const AdminServices = {
   blockUserFromDB,
-  deleteListingFromDB,
+  deleteListingByAdminFromDB,
+  updateListingByAdminFromDB,
 };
