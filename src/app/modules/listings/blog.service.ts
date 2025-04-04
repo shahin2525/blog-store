@@ -67,12 +67,12 @@ const updateListingIntoDB = async (
     throw new AppError(StatusCodes.FORBIDDEN, 'you are deactivated');
   }
 
-  const blogInfo = await Listing.findById(id);
+  const listingInfo = await Listing.findById(id);
 
-  const isListingAuthorMatch =
-    blogInfo?.landlordID.toString() !== user._id.toString();
+  const isListingLandlordMatch =
+    listingInfo?.landlordID.toString() !== user._id.toString();
 
-  if (isListingAuthorMatch) {
+  if (isListingLandlordMatch) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
       'landlord does not exists this listing',

@@ -63,7 +63,7 @@ const getAllListings: RequestHandler = async (req, res, next) => {
     const result = await ListingServices.getAllListingsFromDB(req.query);
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Listings fetched successfully',
+      message: 'get all Listings fetched successfully',
       statusCode: StatusCodes.OK,
       data: result,
     });
