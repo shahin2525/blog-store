@@ -15,7 +15,7 @@ import { User } from '../user/user.model';
 // import { User } from '../user/user.model';
 // import { requestUtils } from './request.utils';
 
-const createRequestBikeIntoDB = async (
+const createTenantRequestIntoDB = async (
   userEmail: string,
   payload: TRequest,
   //   client_ip: string,
@@ -27,6 +27,8 @@ const createRequestBikeIntoDB = async (
   if (!findListingData) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'listing is not found');
   }
+  payload.tenantID = user!._id;
+  payload.listingID = findListingData._id;
 
   const result = await Request.create(payload);
   return result;
@@ -194,7 +196,7 @@ const getAllRequestByEmailForSingleCustomerFromDB = async (email: string) => {
   return result;
 };
 export const RequestServices = {
-  createRequestBikeIntoDB,
+  createTenantRequestIntoDB,
   //   calculateRevenueFromDB,
   deleteRequestFromDB,
   updateRequestFromDB,

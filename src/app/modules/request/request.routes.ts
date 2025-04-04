@@ -15,7 +15,11 @@ const router = Router();
 
 // requestRouter.get("/verify", auth(UserRole.user), requestController.verifyPayment);
 
-router.post('/', auth(USER_ROLE.tenant), RequestControllers.createRequestBike);
+router.post(
+  '/request/',
+  auth(USER_ROLE.tenant),
+  RequestControllers.createTenantRequest,
+);
 router.delete(
   '/:requestId',
   auth(USER_ROLE.admin),

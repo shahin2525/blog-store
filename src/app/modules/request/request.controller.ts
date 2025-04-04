@@ -3,13 +3,13 @@ import { RequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { RequestServices } from './request.service';
 
-const createRequestBike: RequestHandler = async (req, res, next) => {
+const createTenantRequest: RequestHandler = async (req, res, next) => {
   try {
     const userEmail = req.user?.data.email;
     // console.log('user', userEmail);
     // const user
     const payload = req.body;
-    const result = await RequestServices.createRequestBikeIntoDB(
+    const result = await RequestServices.createTenantRequestIntoDB(
       userEmail,
       payload,
       //   req.ip!,
@@ -143,7 +143,7 @@ const getAllRequestByEmailForSingleTenant: RequestHandler = async (
 };
 export const RequestControllers = {
   deleteRequest,
-  createRequestBike,
+  createTenantRequest,
   //   calculateTotalRevenue,
   updateRequest,
   getAllRequest,
