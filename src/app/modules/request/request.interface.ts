@@ -5,7 +5,8 @@ export type TRequest = {
   tenantID: Types.ObjectId;
   //   quantity: number;
   //   totalPrice: number;
-  status: 'Pending' | 'Paid' | 'Shipped' | 'Completed' | 'Cancelled';
+  status: 'Pending' | 'approve' | 'reject';
+  landlordPhoneNumber?: string;
   //   transaction: {
   //     id: string;
   //     transactionStatus: string;

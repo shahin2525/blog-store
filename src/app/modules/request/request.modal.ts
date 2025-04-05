@@ -13,22 +13,25 @@ const RequestSchema = new Schema<TRequest, RequestModel>(
       ref: 'User',
       required: [true, 'Tenant user is required'],
     },
-
     status: {
       type: String,
-      enum: ['Pending', 'Paid', 'Shipped', 'Completed', 'Cancelled'],
+      enum: ['Pending', 'approve', 'reject'], // Changed to match interface
       default: 'Pending',
     },
-    // transaction: {
-    //   id: String,
-    //   transactionStatus: String,
-    //   bank_status: String,
-    //   sp_code: String,
-    //   sp_message: String,
-    //   method: String,
-    //   date_time: String,
-    // },
+    landlordPhoneNumber: {
+      type: String,
+      required: false, // Optional as per interface
+    },
   },
+  // transaction: {
+  //   id: String,
+  //   transactionStatus: String,
+  //   bank_status: String,
+  //   sp_code: String,
+  //   sp_message: String,
+  //   method: String,
+  //   date_time: String,
+  // },
   {
     timestamps: true,
   },

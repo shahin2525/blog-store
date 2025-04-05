@@ -6,6 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../error/appError';
 import mongoose from 'mongoose';
 import { Request } from '../request/request.modal';
+import { TRequest } from '../request/request.interface';
 
 const createListingIntoDB = async (payload: TListing, userData: JwtPayload) => {
   const { data } = userData;
@@ -163,6 +164,45 @@ const getAllListingByEmailForSingleLandlordFromDB = async (
   return result;
 };
 
+const respondRentalRequestIntoDB = async (
+  id: string,
+  payload: Partial<TRequest>,
+  userData: JwtPayload,
+) => {
+  const { data } = userData;
+  const { email } = data;
+  const user = await User.isUserExists(email);
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'user is not found');
+  }
+  const isBlocked = user.deactivate;
+  if (isBlocked) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'you are deactivated');
+  }
+
+  const requestInfo = await Request.findById(id);
+  if (!requestInfo) {
+    throw new Error('request not found');
+  }
+  const requestInfoListingId = requestInfo?.listingID;
+  const requestInfoLandlordId = await Listing.findById(requestInfoListingId);
+
+  const isRequestAndLandlordNotMatch =
+    requestInfoLandlordId?.landlordID.toString() !== user._id.toString();
+
+  if (isRequestAndLandlordNotMatch) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      'landlord does not exists this request',
+    );
+  }
+
+  const result = await Request.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
+
+  return result;
+};
 export const ListingServices = {
   createListingIntoDB,
   updateListingIntoDB,
@@ -171,6 +211,7 @@ export const ListingServices = {
   getAllListingByEmailForSingleLandlordFromDB,
   getAllListingForAdminFromDB,
   getAllRentalListingRequestForSingleLandlordFromDB,
+  respondRentalRequestIntoDB,
 };
 
 /*

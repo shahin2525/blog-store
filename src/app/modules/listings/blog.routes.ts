@@ -10,6 +10,11 @@ router.put(
   auth(USER_ROLE.admin, USER_ROLE.landlord),
   ListingController.updateListing,
 );
+router.put(
+  '/requests/:id',
+  auth(USER_ROLE.landlord),
+  ListingController.respondRentalRequest,
+);
 router.delete(
   '/listings/:id',
   auth(USER_ROLE.landlord),

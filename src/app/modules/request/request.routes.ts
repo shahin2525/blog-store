@@ -37,10 +37,21 @@ router.get(
 );
 
 router.get('/', auth(USER_ROLE.admin), RequestControllers.getAllRequest);
+// router.get(
+//   '/requests',
+//   auth(USER_ROLE.tenant),
+//   RequestControllers.getAllRequest,
+// );
+// router.get(
+//   '/requests',
+//   auth(USER_ROLE.tenant),
+//   RequestControllers.getAllRequestByEmailForSingleTenant,
+// );
+
 router.get(
   '/requests',
   auth(USER_ROLE.tenant),
-  RequestControllers.getAllRequest,
+  RequestControllers.getAllTenantRequestForSingleTenant,
 );
 
 // router.get('/revenue', RequestControllers.calculateTotalRevenue);

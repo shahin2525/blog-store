@@ -141,6 +141,31 @@ const getAllRequestByEmailForSingleTenant: RequestHandler = async (
     next(error);
   }
 };
+
+const getAllTenantRequestForSingleTenant: RequestHandler = async (
+  req,
+  res,
+  next,
+) => {
+  try {
+    // const email = req.params.email;
+    const userData = req.user;
+
+    // console.log(email);
+    const result =
+      await RequestServices.getAllTenantRequestForSingleTenantFromDB(userData);
+
+    res.status(200).json({
+      status: true,
+      message:
+        'get all tenant requests for single tenant retrieved successfully',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const RequestControllers = {
   deleteRequest,
   createTenantRequest,
@@ -149,5 +174,6 @@ export const RequestControllers = {
   getAllRequest,
   getSingleRequest,
   getAllRequestByEmailForSingleTenant,
+  getAllTenantRequestForSingleTenant,
   //   verifyPayment,
 };

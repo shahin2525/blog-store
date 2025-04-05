@@ -4,6 +4,7 @@ import { TRequest } from './request.interface';
 import { Listing } from '../listings/blog.model';
 import { Request } from './request.modal';
 import { User } from '../user/user.model';
+import { JwtPayload } from 'jsonwebtoken';
 // import { User } from '../user/user.model';
 // import { TRequest } from './request.interface';
 // import { Request } from '../requests/blog.model';
@@ -195,6 +196,53 @@ const getAllRequestByEmailForSingleCustomerFromDB = async (email: string) => {
   const result = await Request.find({ email });
   return result;
 };
+// const getAllTenantRequestForSingleTenantFromDB = async (data: JwtPayload) => {
+//   const email = data?.data?.email;
+
+//   // const user = await User.isUserExists(email);
+//   // console.log(user?._id);
+//   // const result = await Request.findById(user?._id);
+//   // console.log('ser', result);
+
+//   // return result;
+//   // 1. Get landlord user
+//   const user = await User.isUserExists(email);
+//   console.log('user', user);
+//   const tenantId = user?._id; //tenantId
+//   console.log('tenantId', tenantId);
+//   //find request owned by this tenant
+//   // 2. Find listings owned by this landlord
+//   const requests = await User.find({ tenantID: tenantId }, { _id: 1 });
+//   console.log('requests', requests);
+//   const requestIds = requests.map((listing) => listing._id);
+//   console.log('requestIds', requestIds);
+//   // 3. Find requests that match these listing IDs
+//   const requestsForTenant = await Request.find({
+//     tenantID: { $in: requestIds },
+//   })
+//     .populate('listingID') // optional: to include listing data
+//     .populate('tenantID'); // optional: to include tenant data
+//   console.log('res', requestsForTenant);
+//   return requestsForTenant;
+// };
+const getAllTenantRequestForSingleTenantFromDB = async (data: JwtPayload) => {
+  const email = data?.data?.email;
+
+  // 1. Get tenant user
+  const user = await User.isUserExists(email);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const tenantId = user._id;
+
+  // 2. Find all requests where tenantID matches the user's ID
+  const requestsForTenant = await Request.find({ tenantID: tenantId });
+  // .populate('listingID') // optional: to include listing data
+  // .populate('tenantID'); // optional: to include tenant data
+
+  return requestsForTenant;
+};
 export const RequestServices = {
   createTenantRequestIntoDB,
   //   calculateRevenueFromDB,
@@ -203,5 +251,6 @@ export const RequestServices = {
   getSingleRequestFromDB,
   getAllRequestFromDB,
   getAllRequestByEmailForSingleCustomerFromDB,
+  getAllTenantRequestForSingleTenantFromDB,
   //   verifyPayment,
 };
