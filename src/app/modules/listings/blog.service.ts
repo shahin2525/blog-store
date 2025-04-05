@@ -5,6 +5,7 @@ import { User } from '../user/user.model';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../error/appError';
 import mongoose from 'mongoose';
+import { Request } from '../request/request.modal';
 
 const createListingIntoDB = async (payload: TListing, userData: JwtPayload) => {
   const { data } = userData;
@@ -55,6 +56,35 @@ const getAllListingsFromDB = async (query: Record<string, unknown>) => {
 const getAllListingForAdminFromDB = async () => {
   const result = await Listing.find();
   return result;
+};
+const getAllRentalListingRequestForSingleLandlordFromDB = async (
+  data: JwtPayload,
+) => {
+  const email = data?.data?.email;
+
+  // const user = await User.isUserExists(email);
+  // console.log(user?._id);
+  // const result = await Request.findById(user?._id);
+  // console.log('ser', result);
+
+  // return result;
+  // 1. Get landlord user
+  const user = await User.isUserExists(email);
+  const landlordId = user?._id;
+
+  // 2. Find listings owned by this landlord
+  const listings = await Listing.find({ landlordID: landlordId }, { _id: 1 });
+
+  const listingIds = listings.map((listing) => listing._id);
+
+  // 3. Find requests that match these listing IDs
+  const requests = await Request.find({
+    listingID: { $in: listingIds },
+  })
+    .populate('listingID') // optional: to include listing data
+    .populate('tenantID'); // optional: to include tenant data
+
+  return requests;
 };
 const updateListingIntoDB = async (
   id: string,
@@ -140,6 +170,7 @@ export const ListingServices = {
   getAllListingsFromDB,
   getAllListingByEmailForSingleLandlordFromDB,
   getAllListingForAdminFromDB,
+  getAllRentalListingRequestForSingleLandlordFromDB,
 };
 
 /*

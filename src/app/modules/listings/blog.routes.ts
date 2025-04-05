@@ -6,20 +6,38 @@ import { USER_ROLE } from '../user/user.const';
 const router = Router();
 
 router.put(
-  '/:id',
+  '/listings/:id',
   auth(USER_ROLE.admin, USER_ROLE.landlord),
   ListingController.updateListing,
 );
 router.delete(
-  '/:id',
+  '/listings/:id',
   auth(USER_ROLE.landlord),
   ListingController.deleteListing,
 );
-router.post('/', auth(USER_ROLE.landlord), ListingController.createListing);
-router.get('/', auth(USER_ROLE.landlord), ListingController.getAllListings);
+router.post(
+  '/listings/',
+  auth(USER_ROLE.landlord),
+  ListingController.createListing,
+);
 router.get(
-  '/',
+  '/listings/',
+  auth(USER_ROLE.landlord),
+  ListingController.getAllListings,
+);
+router.get(
+  '/listings/',
   auth(USER_ROLE.landlord),
   ListingController.getAllListingByEmailForSingleLandlord,
+);
+// router.get(
+//   '/requests',
+//   auth(USER_ROLE.landlord),
+//   ListingController.getAllListingByEmailForSingleLandlord,
+// );
+router.get(
+  '/requests',
+  auth(USER_ROLE.landlord),
+  ListingController.getAllRentalListingRequestForSingleLandlord,
 );
 export const ListingRoutes = router;

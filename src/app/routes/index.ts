@@ -18,7 +18,7 @@ const routesModule = [
     route: UserRoutes,
   },
   {
-    path: '/landlords/listings/',
+    path: '/landlords/',
     route: ListingRoutes,
   },
   {
@@ -26,7 +26,7 @@ const routesModule = [
     route: AdminRoutes,
   },
   {
-    path: '/tenant/',
+    path: '/tenants',
     route: RequestRoutes,
   },
 ];

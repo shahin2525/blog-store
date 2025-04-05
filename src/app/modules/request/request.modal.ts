@@ -10,8 +10,8 @@ const RequestSchema = new Schema<TRequest, RequestModel>(
     },
     tenantID: {
       type: Schema.Types.ObjectId,
-      ref: 'Bike',
-      required: [true, 'bike is required'],
+      ref: 'User',
+      required: [true, 'Tenant user is required'],
     },
 
     status: {

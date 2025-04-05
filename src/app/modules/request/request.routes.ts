@@ -16,7 +16,7 @@ const router = Router();
 // requestRouter.get("/verify", auth(UserRole.user), requestController.verifyPayment);
 
 router.post(
-  '/request/',
+  '/requests',
   auth(USER_ROLE.tenant),
   RequestControllers.createTenantRequest,
 );
@@ -31,14 +31,14 @@ router.put(
   RequestControllers.updateRequest,
 );
 router.get(
-  '/:requestId',
+  '/requests/:id',
   auth(USER_ROLE.admin),
   RequestControllers.getSingleRequest,
 );
 
 router.get('/', auth(USER_ROLE.admin), RequestControllers.getAllRequest);
 router.get(
-  '/tenants/requests/',
+  '/requests',
   auth(USER_ROLE.tenant),
   RequestControllers.getAllRequest,
 );
