@@ -27,7 +27,10 @@ const loginUser: RequestHandler = async (req, res, next) => {
       success: true,
       message: 'login successful',
       statusCode: StatusCodes.OK,
-      data: accessToken,
+      data: {
+        accessToken,
+        refreshToken,
+      },
     });
   } catch (error) {
     next(error);
