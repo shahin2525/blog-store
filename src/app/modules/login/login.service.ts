@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import config from '../../config';
 import AppError from '../../error/appError';
 import { User } from '../user/user.model';
-import { TLoginUser, TProfileUpdateData } from './login.interface';
+import { IJwtPayload, TLoginUser, TProfileUpdateData } from './login.interface';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { hashSync } from 'bcryptjs';
 import { TUser } from '../user/user.interface';
@@ -25,9 +25,11 @@ const loginUser = async (payload: TLoginUser) => {
   if (!isPasswordMatch) {
     throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid password');
   }
-  const jwtPayload = {
+  const jwtPayload: IJwtPayload = {
     email: user?.email,
     role: user?.role,
+    name: user?.name,
+    userId: user._id,
   };
   const accessToken = jwt.sign(
     {
