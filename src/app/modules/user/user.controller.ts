@@ -20,6 +20,7 @@ const createUser: RequestHandler = async (req, res, next) => {
 };
 const getAllUser: RequestHandler = async (req, res, next) => {
   try {
+    // console.log('req.user', req.user);
     const result = await UserServices.getAllUserFromDB();
     res.status(StatusCodes.OK).json({
       success: true,

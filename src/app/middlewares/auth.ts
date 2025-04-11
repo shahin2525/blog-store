@@ -16,7 +16,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
         throw new AppError(StatusCodes.UNAUTHORIZED, 'you are unauthorize 1');
       }
       const decoded = jwt.verify(token, config.jwt_secret as string);
-      //   console.log(decoded);
+      // console.log('decod', decoded);
       const { data } = decoded as JwtPayload;
       const { email, role } = data;
       const user = await User.isUserExists(email);

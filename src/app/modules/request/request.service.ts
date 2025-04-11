@@ -22,7 +22,7 @@ const createTenantRequestIntoDB = async (
   //   client_ip: string,
 ) => {
   const user = await User.isUserExists(userEmail);
-  console.log(user);
+
   const findListingData = await Listing.findById(payload.listingID);
 
   if (!findListingData) {

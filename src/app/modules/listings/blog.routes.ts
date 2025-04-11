@@ -27,7 +27,7 @@ router.post(
 );
 router.get(
   '/listings/',
-  auth(USER_ROLE.landlord),
+  auth(USER_ROLE.tenant, USER_ROLE.admin),
   ListingController.getAllListings,
 );
 router.get(
