@@ -100,7 +100,7 @@ const getAllListingByEmailForSingleLandlord: RequestHandler = async (
         userData,
       );
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'get all listing for single landlord retrieved successfully',
       data: result,
     });
@@ -125,7 +125,7 @@ const getAllRentalListingRequestForSingleLandlord: RequestHandler = async (
       );
 
     res.status(200).json({
-      status: true,
+      success: true,
       message:
         'get all rental request listing for single landlord retrieved successfully',
       data: result,

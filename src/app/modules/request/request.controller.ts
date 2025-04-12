@@ -16,8 +16,8 @@ const createTenantRequest: RequestHandler = async (req, res, next) => {
     );
 
     res.status(200).json({
-      message: 'Request  created successfully',
-      status: true,
+      message: 'Rental Request created successfully',
+      success: true,
       data: result,
     });
   } catch (error) {
@@ -87,7 +87,7 @@ const updateRequest: RequestHandler = async (req, res, next) => {
     const data = req.body;
     const result = await RequestServices.updateRequestFromDB(id, data);
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'Request updated successfully',
       data: result,
     });
@@ -99,7 +99,7 @@ const getAllRequest: RequestHandler = async (req, res, next) => {
   try {
     const result = await RequestServices.getAllRequestFromDB();
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'Requests retrieved successfully',
       data: result,
     });
@@ -113,7 +113,7 @@ const getSingleRequest: RequestHandler = async (req, res, next) => {
     const id = req.params.requestId;
     const result = await RequestServices.getSingleRequestFromDB(id);
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'single request retrieved successfully',
       data: result,
     });
@@ -133,7 +133,7 @@ const getAllRequestByEmailForSingleTenant: RequestHandler = async (
     const result =
       await RequestServices.getAllRequestByEmailForSingleCustomerFromDB(email);
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'get all requests for single tenant retrieved successfully',
       data: result,
     });
@@ -156,7 +156,7 @@ const getAllTenantRequestForSingleTenant: RequestHandler = async (
       await RequestServices.getAllTenantRequestForSingleTenantFromDB(userData);
 
     res.status(200).json({
-      status: true,
+      success: true,
       message:
         'get all tenant requests for single tenant retrieved successfully',
       data: result,

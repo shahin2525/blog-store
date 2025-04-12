@@ -10,8 +10,9 @@ const auth = (...requiredRoles: TUserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       // console.log(req.headers.authorization);
-      const token = req.headers.authorization?.split(' ')[1];
-      // console.log(token);
+      // const token = req.headers.authorization?.split(' ')[1];
+      const token = req.headers.authorization;
+      // console.log('token', token);
       if (!token) {
         throw new AppError(StatusCodes.UNAUTHORIZED, 'you are unauthorize 1');
       }
