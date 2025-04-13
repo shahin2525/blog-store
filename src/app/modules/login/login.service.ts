@@ -148,7 +148,7 @@ const updateUserProfile = async (
   // if (!user) {
   //   throw new Error('User not found');
   // }
-  console.log('user data', userData);
+  // console.log('user data', userData);
   const user = await User.isUserExists(userData?.data?.email);
 
   // console.log('user', user);

@@ -14,7 +14,12 @@ router.post(
   //   validateRequest(AuthValidation.changePasswordValidationSchema),
   LoginController.updateUserProfile,
 );
-
+router.post(
+  '/change-password',
+  auth(USER_ROLE.admin, USER_ROLE.landlord, USER_ROLE.tenant),
+  //  validateRequest(AuthValidation.changePasswordValidationSchema),
+  LoginController.changePassword,
+);
 router.post(
   '/refresh-token',
   // validateRequest(AuthValidation.refreshTokenValidationSchema),

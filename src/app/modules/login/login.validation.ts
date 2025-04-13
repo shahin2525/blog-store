@@ -24,8 +24,14 @@ const refreshTokenValidationSchema = z.object({
   }),
 });
 
+const userProfileValidationSchema = z.object({
+  email: z.string({ required_error: 'email is required' }).email().optional(),
+  name: z.string({ required_error: 'name is required' }).optional(),
+});
+
 export const LoginValidations = {
   loginUserValidationSchema,
   changePasswordValidationSchema,
   refreshTokenValidationSchema,
+  userProfileValidationSchema,
 };

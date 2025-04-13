@@ -80,15 +80,18 @@ const refreshToken: RequestHandler = async (req, res, next) => {
 const updateUserProfile: RequestHandler = async (req, res, next) => {
   try {
     const userData = req.user;
-    const { name, email } = req.body; // Allowed fields
+    const { ...profileData } = req.body; // Allowed fields
+
+    const validatedData =
+      LoginValidations.userProfileValidationSchema.parse(profileData);
 
     // Ensure only valid fields are updated
     // const updatedUser = await updateUserProfile(userId, { name, email, oldPassword, newPassword });
 
-    const result = await LoginServices.updateUserProfile(userData, {
-      name,
-      email,
-    });
+    const result = await LoginServices.updateUserProfile(
+      userData,
+      validatedData,
+    );
     res.status(StatusCodes.OK).json({
       success: true,
       message: 'update profile successfully',
