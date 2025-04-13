@@ -9,10 +9,10 @@ const router = Router();
 router.post('/login', LoginController.loginUser);
 
 router.post(
-  '/change-password',
+  '/update-profile',
   auth(USER_ROLE.admin, USER_ROLE.landlord, USER_ROLE.tenant),
   //   validateRequest(AuthValidation.changePasswordValidationSchema),
-  LoginController.changePassword,
+  LoginController.updateUserProfile,
 );
 
 router.post(
