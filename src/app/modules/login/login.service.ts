@@ -5,7 +5,6 @@ import { User } from '../user/user.model';
 import { IJwtPayload, TLoginUser, TProfileUpdateData } from './login.interface';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { hashSync } from 'bcryptjs';
-import { TUser } from '../user/user.interface';
 
 const loginUser = async (payload: TLoginUser) => {
   const user = await User.isUserExists(payload?.email);
@@ -149,6 +148,7 @@ const updateUserProfile = async (
   // if (!user) {
   //   throw new Error('User not found');
   // }
+  console.log('user data', userData);
   const user = await User.isUserExists(userData?.data?.email);
 
   // console.log('user', user);
@@ -164,30 +164,30 @@ const updateUserProfile = async (
   }
 
   // Create an update object
-  const updates: Partial<TUser> = {};
+  const updates: Partial<TProfileUpdateData> = {};
 
   // Update only allowed fields
   if (updateData.name) updates.name = updateData.name;
   if (updateData.email) updates.email = updateData.email;
 
-  // password
-  if (updateData.oldPassword && updateData.newPassword) {
-    const isPasswordMatch = await User.isPasswordMatch(
-      updateData.oldPassword,
-      user.password,
-    );
-    if (!isPasswordMatch) {
-      throw new Error('password is not match');
-    }
-    // Hash the new password
-    updates.password = hashSync(
-      updateData.newPassword,
-      Number(config.bcrypt_salt),
-    );
-  }
+  // // password
+  // if (updateData.oldPassword && updateData.newPassword) {
+  //   const isPasswordMatch = await User.isPasswordMatch(
+  //     updateData.oldPassword,
+  //     user.password,
+  //   );
+  //   if (!isPasswordMatch) {
+  //     throw new Error('password is not match');
+  //   }
+  //   // Hash the new password
+  //   updates.password = hashSync(
+  //     updateData.newPassword,
+  //     Number(config.bcrypt_salt),
+  //   );
+  // }
 
   // Apply the updates
-  const updatedUser = await User.findByIdAndUpdate(
+  const updatedUser = await User.findOneAndUpdate(
     {
       email: userData?.data?.email,
       role: userData?.data?.role,

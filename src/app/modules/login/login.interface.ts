@@ -7,8 +7,6 @@ export type TLoginUser = {
 export type TProfileUpdateData = {
   name?: string;
   email?: string;
-  oldPassword?: string;
-  newPassword?: string;
 };
 export interface IJwtPayload {
   userId: Types.ObjectId;
