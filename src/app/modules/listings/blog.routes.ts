@@ -25,21 +25,21 @@ router.post(
   auth(USER_ROLE.landlord),
   ListingController.createListing,
 );
-router.get(
-  '/listings/',
-  auth(USER_ROLE.tenant, USER_ROLE.admin),
-  ListingController.getAllListings,
-);
-router.get(
-  '/listings/',
-  auth(USER_ROLE.landlord),
-  ListingController.getAllListingByEmailForSingleLandlord,
-);
 // router.get(
-//   '/requests',
+//   '/listings/',
+//   auth(USER_ROLE.tenant, USER_ROLE.admin),
+//   ListingController.getAllListings,
+// );
+// router.get(
+//   '/listings/',
 //   auth(USER_ROLE.landlord),
 //   ListingController.getAllListingByEmailForSingleLandlord,
 // );
+router.get(
+  '/listings',
+  auth(USER_ROLE.landlord),
+  ListingController.getAllListingForSingleLandlord,
+);
 router.get(
   '/requests',
   auth(USER_ROLE.landlord),

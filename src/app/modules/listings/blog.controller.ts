@@ -18,6 +18,29 @@ const createListing: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+// single landlord
+const getAllListingForSingleLandlord: RequestHandler = async (
+  req,
+  res,
+  next,
+) => {
+  try {
+    const userData = req.user;
+
+    // console.log(userData);
+    const result =
+      await ListingServices.getAllListingForSingleLandlordFromDB(userData);
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'get Listings data for landlord successfully',
+      statusCode: StatusCodes.OK,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 // blog update
 const updateListing: RequestHandler = async (req, res, next) => {
   try {
@@ -166,4 +189,5 @@ export const ListingController = {
   getAllListingsForAdmin,
   getAllRentalListingRequestForSingleLandlord,
   respondRentalRequest,
+  getAllListingForSingleLandlord,
 };

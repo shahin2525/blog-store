@@ -58,6 +58,20 @@ const getAllListingForAdminFromDB = async () => {
   const result = await Listing.find();
   return result;
 };
+const getAllListingForSingleLandlordFromDB = async (userData: JwtPayload) => {
+  const user = await User.findById(userData?.data?.userId);
+
+  if (!user) {
+    throw new Error('user not found');
+  }
+
+  const isBlocked = user.deactivate;
+  if (isBlocked) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'you are deactivated');
+  }
+  const result = await Listing.find({ landlordID: userData?.data?.userId });
+  return result;
+};
 const getAllRentalListingRequestForSingleLandlordFromDB = async (
   data: JwtPayload,
 ) => {
@@ -212,6 +226,7 @@ export const ListingServices = {
   getAllListingForAdminFromDB,
   getAllRentalListingRequestForSingleLandlordFromDB,
   respondRentalRequestIntoDB,
+  getAllListingForSingleLandlordFromDB,
 };
 
 /*
