@@ -80,6 +80,21 @@ const deleteListing: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const getSingleListingIntoDB: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const result = await ListingServices.getSingleListingIntoDB(id);
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'single Listing retrieve successfully',
+      statusCode: StatusCodes.OK,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const getAllListings: RequestHandler = async (req, res, next) => {
   try {
@@ -190,4 +205,5 @@ export const ListingController = {
   getAllRentalListingRequestForSingleLandlord,
   respondRentalRequest,
   getAllListingForSingleLandlord,
+  getSingleListingIntoDB,
 };

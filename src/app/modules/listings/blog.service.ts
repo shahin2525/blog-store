@@ -101,37 +101,33 @@ const getAllRentalListingRequestForSingleLandlordFromDB = async (
 
   return requests;
 };
-const updateListingIntoDB = async (
-  id: string,
-  payload: Partial<TListing>,
-  userData: JwtPayload,
-) => {
-  const { data } = userData;
-  const { email } = data;
-  const user = await User.isUserExists(email);
-  if (!user) {
-    throw new AppError(StatusCodes.NOT_FOUND, 'user is not found');
-  }
-  const isBlocked = user.deactivate;
-  if (isBlocked) {
-    throw new AppError(StatusCodes.FORBIDDEN, 'you are deactivated');
-  }
+const getSingleListingIntoDB = async (id: string) => {
+  // const { data } = userData;
+  // const { email } = data;
+  // const user = await User.isUserExists(email);
+  // if (!user) {
+  //   throw new AppError(StatusCodes.NOT_FOUND, 'user is not found');
+  // }
+  // const isBlocked = user.deactivate;
+  // if (isBlocked) {
+  //   throw new AppError(StatusCodes.FORBIDDEN, 'you are deactivated');
+  // }
 
-  const listingInfo = await Listing.findById(id);
+  const result = await Listing.findById(id);
 
-  const isListingLandlordMatch =
-    listingInfo?.landlordID.toString() !== user._id.toString();
+  // const isListingLandlordMatch =
+  //   listingInfo?.landlordID.toString() !== user._id.toString();
 
-  if (isListingLandlordMatch) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      'landlord does not exists this listing',
-    );
-  }
+  // if (isListingLandlordMatch) {
+  //   throw new AppError(
+  //     StatusCodes.BAD_REQUEST,
+  //     'landlord does not exists this listing',
+  //   );
+  // }
 
-  const result = await Listing.findByIdAndUpdate(id, payload, {
-    new: true,
-  });
+  // const result = await Listing.findByIdAndUpdate(id, payload, {
+  //   new: true,
+  // });
 
   return result;
 };
@@ -165,6 +161,41 @@ const deleteListingFromDB = async (
   }
 
   const result = await Listing.findByIdAndDelete(id);
+
+  return result;
+};
+const updateListingIntoDB = async (
+  id: string,
+  payload: Partial<TListing>,
+
+  userData: JwtPayload,
+) => {
+  const { data } = userData;
+  const { email } = data;
+  const user = await User.isUserExists(email);
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'user is not found');
+  }
+  const isBlocked = user.deactivate;
+  if (isBlocked) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'you are deactivated');
+  }
+
+  const listingInfo = await Listing.findById(id);
+
+  const isListingLandlordMatch =
+    listingInfo?.landlordID.toString() !== user._id.toString();
+
+  if (isListingLandlordMatch) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      'landlord does not exists this listing',
+    );
+  }
+
+  const result = await Listing.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
 
   return result;
 };
@@ -227,6 +258,7 @@ export const ListingServices = {
   getAllRentalListingRequestForSingleLandlordFromDB,
   respondRentalRequestIntoDB,
   getAllListingForSingleLandlordFromDB,
+  getSingleListingIntoDB,
 };
 
 /*
