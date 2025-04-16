@@ -244,6 +244,7 @@ const respondRentalRequestIntoDB = async (
 
   const result = await Request.findByIdAndUpdate(id, payload, {
     new: true,
+    runValidators: true,
   });
 
   return result;
