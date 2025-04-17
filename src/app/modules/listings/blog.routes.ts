@@ -25,11 +25,11 @@ router.post(
   auth(USER_ROLE.landlord),
   ListingController.createListing,
 );
-// router.get(
-//   '/listings/',
-//   auth(USER_ROLE.tenant, USER_ROLE.admin),
-//   ListingController.getAllListings,
-// );
+router.get(
+  '/listings/',
+
+  ListingController.getAllListings,
+);
 
 router.get(
   '/listings/:id',
