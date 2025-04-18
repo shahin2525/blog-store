@@ -26,7 +26,7 @@ router.post(
   ListingController.createListing,
 );
 router.get(
-  '/listings/',
+  '/listings',
 
   ListingController.getAllListings,
 );

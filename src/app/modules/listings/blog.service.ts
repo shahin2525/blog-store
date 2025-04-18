@@ -4,7 +4,7 @@ import { Listing } from './blog.model';
 import { User } from '../user/user.model';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../error/appError';
-import mongoose from 'mongoose';
+
 import { Request } from '../request/request.modal';
 import { TRequest } from '../request/request.interface';
 
@@ -25,33 +25,72 @@ const createListingIntoDB = async (payload: TListing, userData: JwtPayload) => {
 
   return result;
 };
+// const getAllListingsFromDB = async (query: Record<string, unknown>) => {
+//   const filter: Record<string, unknown> = {};
+//   const { search, sortBy, ...otherFilters } = query;
+
+//   // Search logic (partial match for title or content)
+//   if (search) {
+//     const searchRegex = { $regex: search as string, $options: 'i' };
+//     filter.$or = [{ location: searchRegex }, { content: searchRegex }];
+//   }
+
+//   // Exact match filters
+//   Object.keys(otherFilters).forEach((key) => {
+//     if (key === 'author') {
+//       // Convert to ObjectId for author filtering
+//       filter[key] = new mongoose.Types.ObjectId(otherFilters[key] as string);
+//     } else {
+//       filter[key] = { $regex: otherFilters[key], $options: 'i' };
+//     }
+//   });
+
+//   // Default sort by newest blogs first
+
+//   const sort = sortBy ? (sortBy as string) : '-createdAt';
+
+//   const result = await Listing.find(filter).sort(sort);
+
+//   return result;
+// };
 const getAllListingsFromDB = async (query: Record<string, unknown>) => {
   const filter: Record<string, unknown> = {};
-  const { search, sortBy, ...otherFilters } = query;
+  const { search, rentAmount, numberOfBedrooms, ...otherFilters } = query;
 
-  // Search logic (partial match for title or content)
+  // Search by location (partial match)
   if (search) {
-    const searchRegex = { $regex: search as string, $options: 'i' };
-    filter.$or = [{ location: searchRegex }, { content: searchRegex }];
+    filter.location = { $regex: search as string, $options: 'i' };
   }
 
-  // Exact match filters
-  Object.keys(otherFilters).forEach((key) => {
-    if (key === 'author') {
-      // Convert to ObjectId for author filtering
-      filter[key] = new mongoose.Types.ObjectId(otherFilters[key] as string);
+  // Filter by rent amount range
+  if (rentAmount) {
+    const [min, max] = rentAmount.toString().split('-');
+    if (max === '+') {
+      filter.rentAmount = { $gte: Number(min) };
     } else {
-      filter[key] = { $regex: otherFilters[key], $options: 'i' };
+      filter.rentAmount = { $gte: Number(min), $lte: Number(max) };
+    }
+  }
+
+  // Filter by number of bedrooms range
+  if (numberOfBedrooms) {
+    const [min, max] = numberOfBedrooms.toString().split('-');
+    if (max === '+') {
+      filter.numberOfBedrooms = { $gte: Number(min) };
+    } else {
+      filter.numberOfBedrooms = { $gte: Number(min), $lte: Number(max) };
+    }
+  }
+
+  // Other exact match filters
+  Object.keys(otherFilters).forEach((key) => {
+    if (otherFilters[key]) {
+      filter[key] = otherFilters[key];
     }
   });
 
-  // Default sort by newest blogs first
-
-  const sort = sortBy ? (sortBy as string) : '-createdAt';
-
-  const result = await Listing.find(filter).sort(sort);
-
-  return result;
+  // Query the database with the constructed filter
+  return await Listing.find(filter).exec();
 };
 
 const getAllListingForAdminFromDB = async () => {
