@@ -5,6 +5,7 @@ import { UserRoutes } from '../modules/user/user.routes';
 import { AdminRoutes } from '../modules/admin/admin.routes';
 import { ListingRoutes } from '../modules/listings/blog.routes';
 import { RequestRoutes } from '../modules/request/request.routes';
+import { OrderRoutes } from '../modules/order/order.routes';
 
 const router = Router();
 
@@ -28,6 +29,10 @@ const routesModule = [
   {
     path: '/tenants',
     route: RequestRoutes,
+  },
+  {
+    path: '/orders',
+    route: OrderRoutes,
   },
 ];
 
