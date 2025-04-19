@@ -8,6 +8,9 @@ export type TUser = {
   email: string;
   password: string;
   role: 'landlord' | 'admin' | 'tenant';
+  phone?: string;
+  address?: string;
+  city?: string;
   deactivate: boolean;
 };
 export interface UserModel extends Model<TUser> {
