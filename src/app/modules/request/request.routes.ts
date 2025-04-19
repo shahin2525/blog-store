@@ -37,6 +37,12 @@ router.get(
 );
 
 router.get('/', auth(USER_ROLE.admin), RequestControllers.getAllRequest);
+router.get(
+  '/requests/payment/:requestId',
+  auth(USER_ROLE.tenant),
+  RequestControllers.getSingleRequest,
+);
+
 // router.get(
 //   '/requests',
 //   auth(USER_ROLE.tenant),

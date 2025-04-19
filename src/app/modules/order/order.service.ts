@@ -1,10 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../error/appError';
-import { Bike } from '../bike/bike.model';
+// import { Bike } from '../bike/bike.model';
 import { TOrder } from './order.interface';
 import { Order } from './order.model';
 import { User } from '../user/user.model';
 import { orderUtils } from './order.utils';
+import { Listing } from '../listings/blog.model';
 
 const createOrderBikeIntoDB = async (
   userEmail: string,
@@ -13,7 +14,7 @@ const createOrderBikeIntoDB = async (
 ) => {
   const user = await User.isUserExists(userEmail);
   // console.log(user);
-  const findProductData = await Bike.findById(payload.product);
+  const findProductData = await Listing.findById(payload.product);
 
   if (!findProductData) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'Bike  is not found');
