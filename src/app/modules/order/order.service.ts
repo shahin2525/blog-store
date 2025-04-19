@@ -58,7 +58,7 @@ const createOrderListingIntoDB = async (
   // console.log(totalPrice);
   let order = await Order.create({
     email: payload.email,
-    product: payload.listing,
+    listing: payload.listing,
     quantity: payload.quantity,
     totalPrice,
   });
