@@ -8,7 +8,7 @@ const createOrderBike: RequestHandler = async (req, res, next) => {
     // console.log('user', userEmail);
     // const user
     const payload = req.body;
-    const result = await OrderServices.createOrderBikeIntoDB(
+    const result = await OrderServices.createOrderListingIntoDB(
       userEmail,
       payload,
       req.ip!,

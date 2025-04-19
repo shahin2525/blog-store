@@ -1,64 +1,64 @@
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../error/appError';
-// import { Bike } from '../bike/bike.model';
+// import { Listing } from '../bike/bike.model';
 import { TOrder } from './order.interface';
 import { Order } from './order.model';
 import { User } from '../user/user.model';
 import { orderUtils } from './order.utils';
 import { Listing } from '../listings/blog.model';
 
-const createOrderBikeIntoDB = async (
+const createOrderListingIntoDB = async (
   userEmail: string,
   payload: TOrder,
   client_ip: string,
 ) => {
   const user = await User.isUserExists(userEmail);
   // console.log(user);
-  const findProductData = await Listing.findById(payload.product);
+  const findRentalListing = await Listing.findById(payload.listing);
 
-  if (!findProductData) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Bike  is not found');
+  if (!findRentalListing) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Listing  is not found');
   }
-  const productQuantity = findProductData?.quantity;
+  // const productQuantity = findProductData?.quantity;
 
-  const payLoadQuantity = payload?.quantity;
+  // const payLoadQuantity = payload?.quantity;
 
-  if (productQuantity < payLoadQuantity) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'insufficient stock');
-  }
-  const productStock = findProductData.stock;
-  if (!productStock) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      'Bike stock does not available',
-    );
-  }
-  const newProductQuantity = productQuantity - payload.quantity;
+  // if (productQuantity < payLoadQuantity) {
+  //   throw new AppError(StatusCodes.BAD_REQUEST, 'insufficient stock');
+  // }
+  // const productStock = findProductData.stock;
+  // if (!productStock) {
+  //   throw new AppError(
+  //     StatusCodes.BAD_REQUEST,
+  //     'Listing stock does not available',
+  //   );
+  // }
+  // const newProductQuantity = productQuantity - payload.quantity;
 
   // add  inStock false if product quantity <=0
-  if (newProductQuantity <= 0) {
-    await Bike.findByIdAndUpdate(
-      payload.product,
-      { stock: false },
-      { new: true, runValidators: true },
-    );
-  }
+  // if (newProductQuantity <= 0) {
+  //   await Listing.findByIdAndUpdate(
+  //     payload.product,
+  //     { stock: false },
+  //     { new: true, runValidators: true },
+  //   );
+  // }
 
   // new quantity updated
-  await Bike.findByIdAndUpdate(
-    payload.product,
-    { quantity: newProductQuantity },
-    { new: true, runValidators: true },
-  );
+  // await Listing.findByIdAndUpdate(
+  //   payload.product,
+  //   { quantity: newProductQuantity },
+  //   { new: true, runValidators: true },
+  // );
 
   // console.log(payload);
 
-  const totalPrice = findProductData.price * payload.quantity;
+  const totalPrice = findRentalListing?.rentAmount * payload.quantity;
 
   // console.log(totalPrice);
   let order = await Order.create({
     email: payload.email,
-    product: payload.product,
+    product: payload.listing,
     quantity: payload.quantity,
     totalPrice,
   });
@@ -183,7 +183,7 @@ const getAllOrderByEmailForSingleCustomerFromDB = async (email: string) => {
   return result;
 };
 export const OrderServices = {
-  createOrderBikeIntoDB,
+  createOrderListingIntoDB,
   calculateRevenueFromDB,
   deleteOrderFromDB,
   updateOrderFromDB,

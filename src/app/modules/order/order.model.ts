@@ -4,10 +4,10 @@ import { OrderModel, TOrder } from './order.interface';
 const OrderSchema = new Schema<TOrder, OrderModel>(
   {
     email: { type: String, required: [true, 'email is required'] },
-    product: {
+    listing: {
       type: Schema.Types.ObjectId,
-      ref: 'Bike',
-      required: [true, 'bike is required'],
+      ref: 'Listing',
+      required: [true, 'listing is required'],
     },
     quantity: {
       type: Number,

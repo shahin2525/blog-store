@@ -2,7 +2,7 @@ import { Model, Types } from 'mongoose';
 
 export type TOrder = {
   email: string;
-  product: Types.ObjectId;
+  listing: Types.ObjectId;
   quantity: number;
   totalPrice: number;
   status: 'Pending' | 'Paid' | 'Shipped' | 'Completed' | 'Cancelled';
