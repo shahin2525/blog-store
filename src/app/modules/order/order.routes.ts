@@ -18,6 +18,11 @@ router.put('/:orderId', auth(USER_ROLE.admin), OrderControllers.updateOrder);
 router.get('/:orderId', auth(USER_ROLE.admin), OrderControllers.getSingleOrder);
 
 router.get('/', auth(USER_ROLE.admin), OrderControllers.getAllOrder);
+router.get(
+  '/:email',
+  auth(USER_ROLE.tenant),
+  OrderControllers.getAllOrderByEmailForSingleCustomer,
+);
 
 router.get('/revenue', OrderControllers.calculateTotalRevenue);
 export const OrderRoutes = router;
