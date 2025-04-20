@@ -16,7 +16,7 @@ const createOrderBike: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({
       message: 'Order  created successfully',
-      status: true,
+      success: true,
       data: result,
     });
   } catch (error) {
@@ -42,7 +42,7 @@ const verifyPayment: RequestHandler = async (req, res, next) => {
     );
     // console.log(result);
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'Order verified successfully',
       data: result,
     });
@@ -58,7 +58,7 @@ const calculateTotalRevenue: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({
       message: 'Revenue calculated successfully',
-      status: true,
+      success: true,
       data: result,
     });
   } catch (error) {
@@ -86,7 +86,7 @@ const updateOrder: RequestHandler = async (req, res, next) => {
     const data = req.body;
     const result = await OrderServices.updateOrderFromDB(id, data);
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'Order updated successfully',
       data: result,
     });
@@ -98,7 +98,7 @@ const getAllOrder: RequestHandler = async (req, res, next) => {
   try {
     const result = await OrderServices.getAllOrderFromDB();
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'Orders retrieved successfully',
       data: result,
     });
@@ -112,7 +112,7 @@ const getSingleOrder: RequestHandler = async (req, res, next) => {
     const id = req.params.orderId;
     const result = await OrderServices.getSingleOrderFromDB(id);
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'single order retrieved successfully',
       data: result,
     });
@@ -132,7 +132,7 @@ const getAllOrderByEmailForSingleCustomer: RequestHandler = async (
     const result =
       await OrderServices.getAllOrderByEmailForSingleCustomerFromDB(email);
     res.status(200).json({
-      status: true,
+      success: true,
       message: 'get all orders for single customers retrieved successfully',
       data: result,
     });
