@@ -20,7 +20,24 @@ const blockUserFromDB = async (id: string) => {
   );
   return result;
 };
+const unBlockUserFromDB = async (id: string) => {
+  const user = await User.doesUserExists(id);
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'user does not found');
+  }
+  const userStatusNotBlocked = !user.deactivate;
+  if (userStatusNotBlocked) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'user is already activated ');
+  }
+  const result = await User.findByIdAndUpdate(
+    id,
+    { deactivate: false },
+    { new: true, runValidators: true },
+  );
+  return result;
+};
 
+//
 const deleteListingByAdminFromDB = async (id: string) => {
   const listing = await Listing.isListingExists(id);
   if (!listing) {
@@ -51,4 +68,5 @@ export const AdminServices = {
   blockUserFromDB,
   deleteListingByAdminFromDB,
   updateListingByAdminFromDB,
+  unBlockUserFromDB,
 };

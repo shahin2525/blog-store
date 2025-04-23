@@ -5,129 +5,27 @@ import { Listing } from '../listings/blog.model';
 import { Request } from './request.modal';
 import { User } from '../user/user.model';
 import { JwtPayload } from 'jsonwebtoken';
-// import { User } from '../user/user.model';
-// import { TRequest } from './request.interface';
-// import { Request } from '../requests/blog.model';
-// import { TRequest } from '../requests/blog.interface';
-// import { Request } from './request.modal';
-// import { Bike } from '../bike/bike.model';
-// import { TRequest } from './request.interface';
-// import { Request } from './request.model';
-// import { User } from '../user/user.model';
-// import { requestUtils } from './request.utils';
 
 const createTenantRequestIntoDB = async (
   userEmail: string,
   payload: TRequest,
-  //   client_ip: string,
 ) => {
   const user = await User.isUserExists(userEmail);
 
   const findListingData = await Listing.findById(payload.listingID);
 
   if (!findListingData) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'listing is not found');
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      'Rental listing is not found.please select rental listing',
+    );
   }
   payload.tenantID = user!._id;
   payload.listingID = findListingData._id;
 
   const result = await Request.create(payload);
   return result;
-  //   const productQuantity = findProductData?.quantity;
-
-  //   const payLoadQuantity = payload?.quantity;
-
-  //   if (productQuantity < payLoadQuantity) {
-  //     throw new AppError(StatusCodes.BAD_REQUEST, 'insufficient stock');
-  //   }
-  //   const productStock = findProductData.stock;
-  //   if (!productStock) {
-  //     throw new AppError(
-  //       StatusCodes.BAD_REQUEST,
-  //       'Bike stock does not available',
-  //     );
-  //   }
-  //   const newProductQuantity = productQuantity - payload.quantity;
-
-  //   // add  inStock false if product quantity <=0
-  //   if (newProductQuantity <= 0) {
-  //     await Bike.findByIdAndUpdate(
-  //       payload.product,
-  //       { stock: false },
-  //       { new: true, runValidators: true },
-  //     );
-  //   }
-
-  //   // new quantity updated
-  //   await Bike.findByIdAndUpdate(
-  //     payload.product,
-  //     { quantity: newProductQuantity },
-  //     { new: true, runValidators: true },
-  //   );
-
-  //   // console.log(payload);
-
-  //   const totalPrice = findProductData.price * payload.quantity;
-
-  // console.log(totalPrice);
-  //   let request = await Request.create({
-  //     email: payload.email,
-  //     product: payload.product,
-  //     quantity: payload.quantity,
-  //     // totalPrice,
-  //   });
-  // console.log(request);
-
-  //   const shurjopayPayload = {
-  //     amount: totalPrice,
-
-  //     request_id: request._id,
-  //     currency: 'BDT',
-  //     customer_name: user?.name,
-  //     customer_address: user?.address,
-  //     customer_email: user?.email,
-  //     customer_phone: user?.phone,
-  //     customer_city: user?.city,
-  //     client_ip,
-  //   };
-
-  //   const payment = await requestUtils.makePaymentAsync(shurjopayPayload);
-
-  //   if (payment?.transactionStatus) {
-  //     request = await request.updateOne({
-  //       transaction: {
-  //         id: payment.sp_request_id,
-  //         transactionStatus: payment.transactionStatus,
-  //       },
-  //     });
-  //   }
-
-  //   return payment.checkout_url;
 };
-
-// const calculateRevenueFromDB = async () => {
-//   const allRequestsRevenue = await Request.aggregate([
-//     {
-//       $project: {
-//         revenue: '$totalPrice',
-//       },
-//     },
-//     {
-//       $group: {
-//         _id: null,
-//         totalRevenue: { $sum: '$revenue' },
-//       },
-//     },
-//     {
-//       $project: { _id: 0 },
-//     },
-//   ]);
-//   if (allRequestsRevenue.length > 0) {
-//     return allRequestsRevenue;
-//   } else {
-//     return 0;
-//   }
-// };
 const deleteRequestFromDB = async (id: string) => {
   if (!(await Request.isRequestExists(id))) {
     throw new AppError(StatusCodes.NOT_FOUND, 'request id not found');

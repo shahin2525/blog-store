@@ -127,10 +127,13 @@ const getAllOrderByEmailForSingleCustomer: RequestHandler = async (
   next,
 ) => {
   try {
-    const email = req.params.email;
+    // const email = req.params.email;
     // console.log(email);
+    const user = req.user;
     const result =
-      await OrderServices.getAllOrderByEmailForSingleCustomerFromDB(email);
+      await OrderServices.getAllOrderByEmailForSingleCustomerFromDB(
+        user?.data?.email,
+      );
     res.status(200).json({
       success: true,
       message: 'get all orders for single customers retrieved successfully',

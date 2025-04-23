@@ -53,6 +53,46 @@ const createListingIntoDB = async (payload: TListing, userData: JwtPayload) => {
 
 //   return result;
 // };
+// const getAllListingsFromDB = async (query: Record<string, unknown>) => {
+//   const filter: Record<string, unknown> = {};
+//   const { search, rentAmount, numberOfBedrooms, ...otherFilters } = query;
+
+//   // Search by location (partial match)
+//   if (search) {
+//     filter.location = { $regex: search as string, $options: 'i' };
+//   }
+
+//   // Filter by rent amount range
+//   if (rentAmount) {
+//     const [min, max] = rentAmount.toString().split('-');
+//     if (max === '+') {
+//       filter.rentAmount = { $gte: Number(min) };
+//     } else {
+//       filter.rentAmount = { $gte: Number(min), $lte: Number(max) };
+//     }
+//   }
+
+//   // Filter by number of bedrooms range
+//   if (numberOfBedrooms) {
+//     const [min, max] = numberOfBedrooms.toString().split('-');
+//     if (max === '+') {
+//       filter.numberOfBedrooms = { $gte: Number(min) };
+//     } else {
+//       filter.numberOfBedrooms = { $gte: Number(min), $lte: Number(max) };
+//     }
+//   }
+
+//   // Other exact match filters
+//   Object.keys(otherFilters).forEach((key) => {
+//     if (otherFilters[key]) {
+//       filter[key] = otherFilters[key];
+//     }
+//   });
+
+//   // Query the database with the constructed filter
+//   return await Listing.find(filter).exec();
+// };
+
 const getAllListingsFromDB = async (query: Record<string, unknown>) => {
   const filter: Record<string, unknown> = {};
   const { search, rentAmount, numberOfBedrooms, ...otherFilters } = query;
@@ -62,23 +102,38 @@ const getAllListingsFromDB = async (query: Record<string, unknown>) => {
     filter.location = { $regex: search as string, $options: 'i' };
   }
 
-  // Filter by rent amount range
+  // Filter by rent amount (exact match or range)
   if (rentAmount) {
-    const [min, max] = rentAmount.toString().split('-');
-    if (max === '+') {
-      filter.rentAmount = { $gte: Number(min) };
+    if (typeof rentAmount === 'string' && rentAmount.includes('-')) {
+      // Handle range query (e.g., "500-1000" or "1000-+")
+      const [min, max] = rentAmount.split('-');
+      if (max === '+') {
+        filter.rentAmount = { $gte: Number(min) };
+      } else {
+        filter.rentAmount = { $gte: Number(min), $lte: Number(max) };
+      }
     } else {
-      filter.rentAmount = { $gte: Number(min), $lte: Number(max) };
+      // Handle exact amount query (e.g., "750")
+      filter.rentAmount = Number(rentAmount);
     }
   }
 
-  // Filter by number of bedrooms range
+  // Filter by number of bedrooms (exact match or range)
   if (numberOfBedrooms) {
-    const [min, max] = numberOfBedrooms.toString().split('-');
-    if (max === '+') {
-      filter.numberOfBedrooms = { $gte: Number(min) };
+    if (
+      typeof numberOfBedrooms === 'string' &&
+      numberOfBedrooms.includes('-')
+    ) {
+      // Handle range query (e.g., "2-3" or "4-+")
+      const [min, max] = numberOfBedrooms.split('-');
+      if (max === '+') {
+        filter.numberOfBedrooms = { $gte: Number(min) };
+      } else {
+        filter.numberOfBedrooms = { $gte: Number(min), $lte: Number(max) };
+      }
     } else {
-      filter.numberOfBedrooms = { $gte: Number(min), $lte: Number(max) };
+      // Handle exact number query (e.g., "2")
+      filter.numberOfBedrooms = Number(numberOfBedrooms);
     }
   }
 
@@ -92,7 +147,6 @@ const getAllListingsFromDB = async (query: Record<string, unknown>) => {
   // Query the database with the constructed filter
   return await Listing.find(filter).exec();
 };
-
 const getAllListingForAdminFromDB = async () => {
   const result = await Listing.find();
   return result;

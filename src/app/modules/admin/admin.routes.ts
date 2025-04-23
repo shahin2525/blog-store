@@ -11,14 +11,23 @@ router.patch(
   auth(USER_ROLE.admin),
   AdminController.blockUser,
 );
+//
+router.patch(
+  '/users/:userId/unblock',
+  auth(USER_ROLE.admin),
+  AdminController.unBlockUser,
+);
 
 router.delete(
   '/listings/:id',
   auth(USER_ROLE.admin),
   AdminController.deleteListingByAdmin,
 );
-
+//
+// router.put('/users/:id', auth(USER_ROLE.admin), AdminController.blockUser);
+//
 router.put('/users/:id', auth(USER_ROLE.admin), UserController.updateUserRole);
+//
 router.delete('/users/:id', auth(USER_ROLE.admin), UserController.deleteUser);
 router.put(
   '/listings/:id',

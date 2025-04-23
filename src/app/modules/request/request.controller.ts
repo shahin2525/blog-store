@@ -16,7 +16,8 @@ const createTenantRequest: RequestHandler = async (req, res, next) => {
     );
 
     res.status(200).json({
-      message: 'Rental Request created successfully',
+      message:
+        'Rental Request created successfully and wait for landlord approve',
       success: true,
       data: result,
     });

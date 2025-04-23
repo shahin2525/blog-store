@@ -19,7 +19,7 @@ router.get('/:orderId', auth(USER_ROLE.admin), OrderControllers.getSingleOrder);
 
 router.get('/', auth(USER_ROLE.admin), OrderControllers.getAllOrder);
 router.get(
-  '/:email',
+  '/all',
   auth(USER_ROLE.tenant),
   OrderControllers.getAllOrderByEmailForSingleCustomer,
 );

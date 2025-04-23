@@ -9,14 +9,29 @@ const blockUser: RequestHandler = async (req, res, next) => {
     await AdminServices.blockUserFromDB(id);
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'User blocked successfully',
+      message: 'User deactivated successfully',
       statusCode: StatusCodes.OK,
     });
   } catch (error) {
     next(error);
   }
 };
-
+//
+const unBlockUser: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.userId;
+    // console.log(userData);
+    await AdminServices.unBlockUserFromDB(id);
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'User activated successfully',
+      statusCode: StatusCodes.OK,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+//
 const deleteListingByAdmin: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -52,4 +67,5 @@ export const AdminController = {
   blockUser,
   deleteListingByAdmin,
   updateListingByAdmin,
+  unBlockUser,
 };

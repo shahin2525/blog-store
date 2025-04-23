@@ -27,6 +27,11 @@ router.post(
 );
 router.get(
   '/listings',
+  auth(USER_ROLE.landlord),
+  ListingController.getAllListingForSingleLandlord,
+);
+router.get(
+  '/all/listings',
 
   ListingController.getAllListings,
 );
@@ -36,11 +41,7 @@ router.get(
 
   ListingController.getSingleListingIntoDB,
 );
-router.get(
-  '/listings',
-  auth(USER_ROLE.landlord),
-  ListingController.getAllListingForSingleLandlord,
-);
+
 router.get(
   '/requests',
   auth(USER_ROLE.landlord),
