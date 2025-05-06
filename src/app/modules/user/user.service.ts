@@ -1,3 +1,4 @@
+import { JwtPayload } from 'jsonwebtoken';
 import { TUser } from './user.interface';
 import { User } from './user.model';
 
@@ -29,10 +30,20 @@ const deleteUserFromDB = async (id: string) => {
   const result = await User.findByIdAndDelete(id);
   return result;
 };
+const getSingleUserFromDB = async (userData: JwtPayload) => {
+  const id = userData?.data?.userId;
+  const user = await User.doesUserExists(id);
+  if (!user) {
+    throw new Error('user does not found');
+  }
+  const result = await User.findById(id);
+  return result;
+};
 
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
   updateUserRoleFromDB,
   deleteUserFromDB,
+  getSingleUserFromDB,
 };
